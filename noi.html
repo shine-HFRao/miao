@@ -1,0 +1,106 @@
+<script id="ch0103/01">
+
+  var a = Number(prompt('请输入a'))
+  var b = Number(prompt('请输入b'))
+  var c = a + b;
+  console.log(c)
+</script>
+
+<script id="ch0103/02">
+
+  var a = Number(prompt('请输入a'))
+  var b = Number(prompt('请输入b'))
+  var c = Number(prompt('请输入c'))
+  var result = (a+b)*c;
+  console.log(result)
+</script>
+
+<script id="ch0103/03">
+
+  var a = Number(prompt('请输入a'))
+  var b = Number(prompt('请输入b'))
+  var c = Number(prompt('请输入c'))
+  var result = (a+b)/c;
+  console.log(Math.floor(result))
+</script> -->
+
+<!-- <script id="ch0103/04">
+
+  var a = Number(prompt('请输入a'))
+  var b = Number(prompt('请输入b'))
+  console.log(a, b)
+  if (b === 0) {
+    alert('被除数不能够为0或空')
+  } else {
+    var quotient = Math.floor(a / b);
+    var remainder = a % b
+    console.log(quotient + ' ' + remainder)
+  }
+
+</script>
+
+<script id="ch0103/05">
+
+  var a = Number(prompt('请输入a'))
+  var b = Number(prompt('请输入b'))
+  var c = Number(prompt('请输入c'))
+  var d = Number(prompt('请输入d'))
+  var x = Number(prompt('请输入x'))
+  var y = a*x*x*x + b*x*x + c*x + d
+  console.log(y.toFixed(7))
+</script>
+
+<script id="ch0103/13">  // 反向输出一个三位数
+  // 获取商和余数的解法
+  var a = Number(prompt('请输入a'))
+  var x = Math.floor(a / 100);
+  var y = Math.floor(a % 100 / 10);
+  var z = Math.floor(a % 100 % 10);
+  console.log('' + z + y + x)
+
+  // 字符串换位解法
+  var a = prompt('请输入a')
+  var x = a.charAt(0)
+  var y = a.charAt(1);
+  var z = a.charAt(2);
+  console.log(z + y + x)
+</script>
+
+<script id="ch0104/14">
+
+  var a = Number(prompt('请输入邮件的重量'))
+  var c = prompt('请输入y或n表示是否加急')
+  var sum = 8
+  if (c === 'y' || c === 'n') {
+    if (a > 1000) {
+      var b = a - 1000;
+      var d = Math.ceil(b / 500)
+      sum = 8 + d * 4
+    }
+    if (c === 'y') {
+      sum = sum + 5
+    }
+    console.log(sum)
+  }
+</script>
+
+<script id="ch0104/15">
+  var a = Number(prompt('请输入a'))
+  var b = Number(prompt('请输入b'))
+  var c = Number(prompt('请输入c'))
+  var d = (a > b ? a : b)
+  var result = d > c ? d : c
+  console.log(result)
+</script>
+
+<script id="ch0104/16">
+  var a = Number(prompt('请输入a'))
+  var b = Number(prompt('请输入b'))
+  var c = Number(prompt('请输入c'))
+  if(a + c > b && a+b>c && a+c>b){
+    console.log('yes')
+  }else{
+    console.log('no')
+  }
+
+</script>
