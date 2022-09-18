@@ -21,5 +21,33 @@ var shine_hfrao = {
     }
 
     return resultAry
+  },
+
+  // 转换"a=asdf&b=aef&c=3&c=2&c=5&d=wfe"为对象
+  parseQueryString: function (str) {
+    var obj = {}
+    var pairs = str.split('&')
+    pairs.forEach(function (pair) {
+      var [key, val] = pair.split('=')
+      if (obj.hasOwnProperty(key)) {
+        if (!Array.isArray(obj[key])) {
+          obj[key] = [obj[key]]
+        }
+        obj[key].push(val)
+      } else {
+        obj[key] = val
+      }
+    })
+    return obj
+  },
+
+  compact: function (arr) {
+    var newArr = []
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i]) {
+        newArr.push(arr[i])
+      }
+    }
+    return newArr
   }
 }
