@@ -90,15 +90,13 @@ var shine_hfrao = {
 
   flatten: function (array) {
     return array.reduce(function (result, item, index, array) {
-      if (Array.isArray(item)) {
-        return result.concat(flatten(item))
-      } else {
-        return result.concat(item)
-      }
+
+      return result.concat(item)
+
     }, [])
   },
 
-  flattenDeep: function (array) {
+  flattenDeep: function flattenDeep(array) {
     return array.reduce(function (result, item, index, array) {
       if (Array.isArray(item)) {
         return result.concat(flattenDeep(item))
@@ -154,8 +152,8 @@ var shine_hfrao = {
     return -1
   },
 
-  lastIndexOf: function (arr, val, lastIndex = 1) {
-    for (var i = arr.length - lastIndex; i >= 0; i--) {
+  lastIndexOf: function (arr, val, lastIndex = array.length - 1) {
+    for (var i = lastIndex; i >= 0; i--) {
       if (arr[i] === val) {
         return i
       }
@@ -186,9 +184,9 @@ var shine_hfrao = {
     }
   },
 
-  pull: function (arr, values) {
+  pull: function (arr) {
     var result = []
-    for (var i = 0; i < arr.length; i++) {
+    for (var i = 1; i < arguments.length; i++) {
       var item = arr[i]
       if (values.indexOf(item) === -1) {
         result.push(item)
