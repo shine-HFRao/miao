@@ -1,27 +1,27 @@
 var shine_hfrao = {
-  chunk: function (array, size = 1) {
-    var resultAry = []
-    var itemAry = []
-    var count = 0
+  // chunk: function (array, size = 1) {
+  //   var resultAry = []
+  //   var itemAry = []
+  //   var count = 0
 
-    for (var i = 0; i < array.length; i++) {
-      count++
-      if (count <= size) {
-        itemAry.push(array[i])
-      } else if (count > size) {
-        count = 0
-        resultAry.push(itemAry.slice())
-        itemAry = []
-        itemAry.push(array[i])
-      }
-    }
+  //   for (var i = 0; i < array.length; i++) {
+  //     count++
+  //     if (count <= size) {
+  //       itemAry.push(array[i])
+  //     } else if (count > size) {
+  //       count = 0
+  //       resultAry.push(itemAry.slice())
+  //       itemAry = []
+  //       itemAry.push(array[i])
+  //     }
+  //   }
 
-    if (itemAry.length) {
-      resultAry.push(itemAry.slice())
-    }
+  //   if (itemAry.length) {
+  //     resultAry.push(itemAry.slice())
+  //   }
 
-    return resultAry
-  },
+  //   return resultAry
+  // },
 
   // 转换"a=asdf&b=aef&c=3&c=2&c=5&d=wfe"为对象
   parseQueryString: function (str) {
@@ -119,5 +119,83 @@ var shine_hfrao = {
         return result.concat(item)
       }
     }, [])
+  },
+
+
+  chunk: function (arr, size) {
+    var result = [];
+    var startIndex = 0;
+    if (size >= arr.length) {
+      return arr.slice()
+    }
+    while (startIndex < arr.length) {
+      result.push(arr.slice(startIndex, startIndex + size))
+      startIndex += size
+    }
+    return result
+  },
+
+  fromPairs: function (arr) {
+    var result = {}
+    for (var i = 0; i < arr.length; i++) {
+      result[arr[i][0]] = arr[i][1]
+    }
+    return result
+  },
+
+  head: function (arr) {
+    return arr[0]
+  },
+
+  indexOf: function (arr, val, formIndex = 0) {
+    for (var i = formIndex; i < arr.length; i++) {
+      if (arr[i] === val) {
+        return i
+      }
+    }
+    return -1
+  },
+
+  lastIndexOf: function (arr, val, lastIndex = 1) {
+    for (var i = arr.length - lastIndex; i >= 0; i--) {
+      if (arr[i] === val) {
+        return i
+      }
+    }
+    return -1
+  },
+
+  initial: function (arr) {
+    delete arr[arr.length - 1]
+    arr.length--
+    return arr
+  },
+
+  join: function (arr, separator = ',') {
+    var str = ''
+    for (var i = 0; i < arr.length; i++) {
+      str += arr[i]
+      if (i !== arr.length - 1) {
+        str += separator
+      }
+    }
+    return str
+  },
+
+  last: function (arr) {
+    if (arr.length) {
+      return arr[arr.length - 1]
+    }
+  },
+
+  pull: function (arr, values) {
+    var result = []
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i]
+      if (values.indexOf(item) === -1) {
+        result.push(item)
+      }
+    }
+    return result
   }
 }
