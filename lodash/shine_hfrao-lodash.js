@@ -152,7 +152,7 @@ var shine_hfrao = {
     return -1
   },
 
-  lastIndexOf: function (arr, val, lastIndex = array.length - 1) {
+  lastIndexOf: function (arr, val, lastIndex = arr.length - 1) {
     for (var i = lastIndex; i >= 0; i--) {
       if (arr[i] === val) {
         return i
@@ -188,7 +188,7 @@ var shine_hfrao = {
     var result = []
     for (var i = 1; i < arguments.length; i++) {
       var item = arr[i]
-      if (values.indexOf(item) === -1) {
+      if (arguments.indexOf(item) === -1) {
         result.push(item)
       }
     }
