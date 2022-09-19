@@ -58,10 +58,8 @@ var shine_hfrao = {
     if (end === undefined) {
       end = arr.length
     }
-    for (var i = 0; i < arr.length; i++) {
-      if (start === i && i < end) {
-        arr[i] = val
-      }
+    for (var i = start; i < end; i++) {
+      arr[i] = val
     }
     return arr
   },
