@@ -52,6 +52,12 @@ var shine_hfrao = {
   },
 
   fill: function (arr, val, start, end) {
+    if (start === undefined) {
+      start = 0
+    }
+    if (end === undefined) {
+      end = arr.length
+    }
     for (var i = 0; i < arr.length; i++) {
       if (start === i && i < end) {
         arr[i] = val
@@ -84,31 +90,31 @@ var shine_hfrao = {
 
   // findLastIndex
 
-  flatter: function (array) {
+  flatten: function (array) {
     return array.reduce(function (result, item, index, array) {
       if (Array.isArray(item)) {
-        return result.concat(flatter(item))
+        return result.concat(flatten(item))
       } else {
         return result.concat(item)
       }
     }, [])
   },
 
-  flatterDeep: function (array) {
+  flattenDeep: function (array) {
     return array.reduce(function (result, item, index, array) {
       if (Array.isArray(item)) {
-        return result.concat(flatterDeep(item))
+        return result.concat(flattenDeep(item))
       } else {
         return result.concat(item)
       }
     }, [])
   },
 
-  flatterDepth: function flatterDepth(array, depth = 1) {
+  flattenDepth: function flattenDepth(array, depth = 1) {
     return array.reduce(function (result, item, index, array) {
       if (Array.isArray(item) && depth > 1) {
         depth--
-        return result.concat(flatterDepth(item, depth))
+        return result.concat(flattenDepth(item, depth))
       } else {
         return result.concat(item)
       }
