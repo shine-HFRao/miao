@@ -80,15 +80,54 @@ var shine_hfrao = {
   },
 
   // 删除数组尾部的 n 个元素，返回删除后的原数组
-  dropRight: function (arr, n) {
+  dropRight: function (arr, n = 0) {
+    if (n > arr.length) {
+      n = arr.length
+    }
     arr.splice(arr.length - n)
     return arr
   },
 
-
-  dropRightWhile: function (arr, predicate) {
+  // 创建一个切片数组，去除array中从起点开始到 predicate 返回假值结束部分。predicate 会传入3个参数： (value, index, array)。
+  dropWhile: function (arr, predicate) {
     var result = []
     for (var i = 0; i < arr.length; i++) {
+      if (Object.prototype.toString.call(predicate) === '[object Function]') {
+        if (!predicate(arr[i], i, arr)) {
+          arr.splice(i, 1)
+          return arr
+        }
+      }
+      if (Object.prototype.toString.call(predicate) === '[object Object]') {
+        var is = true
+        for (key in arr[i]) {
+          if (arr[i][key] !== predicate[key]) {
+            is = false
+          }
+        }
+        if (!is) {
+          result.push(arr[i])
+        }
+      }
+      if (Object.prototype.toString.call(predicate) === '[object Array]') {
+        if (!(arr[i][predicate[0]] === predicate[1])) {
+          result.push(arr[i])
+        }
+      }
+      if (Object.prototype.toString.call(predicate) === '[object String]') {
+        if (arr[i].hasOwnProperty(predicate)) {
+          result.push(arr[i])
+        }
+      }
+    }
+
+    return result
+  },
+
+  // 创建一个切片数组，去除array中从 predicate 返回假值开始到尾部的部分。predicate 会传入3个参数： (value, index, array)。
+  dropRightWhile: function (arr, predicate) {
+    var result = []
+    for (var i = arr.length - 1; i >= 0; i--) {
       if (Object.prototype.toString.call(predicate) === '[object Function]') {
         if (!predicate(arr[i], i, arr)) {
           result.push(arr[i])
