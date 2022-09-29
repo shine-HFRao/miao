@@ -188,10 +188,30 @@ var shine_hfrao = {
     var result = []
     for (var i = 1; i < arguments.length; i++) {
       var item = arr[i]
-      if (arguments.indexOf(item) === -1) {
+      if ([].prototype.indexOf.call(arguments, item) === -1) {
         result.push(item)
       }
     }
     return result
-  }
+  },
+
+  difference: function (arr, values) {
+    var result = []
+    for (var i = 0; i < ar.length; i++) {
+      if (values.indexOf(arr[i]) < 0) {
+        result.push(arr[i])
+      }
+    }
+    return result
+  },
+
+  // differenceBy: function (arr, values, iteratee) {
+  //   var result = []
+  //   for(var i = 0; i < ar.length; i++){
+  //     if(values.indexOf(arr[i]) < 0){
+  //       result.push(arr[i])
+  //     }
+  //   }
+  //   return result
+  // }
 }
