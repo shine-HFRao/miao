@@ -184,31 +184,45 @@ var shine_hfrao = {
     }
   },
 
+  remove: function () {
+
+  },
+
   pull: function (arr) {
-    var result = []
     for (var i = 1; i < arguments.length; i++) {
+      var item = arguments[i]
+
+      for (var j = 0; j < arr.length; j++) {
+        if (arr[j] === item) {
+          arr.splice(j, 1)
+        }
+      }
+    }
+    return arr
+  },
+
+  difference: function (arr, values) {
+    var result = []
+    for (var i = 0; i < arr.length; i++) {
       var item = arr[i]
-      if ([].prototype.indexOf.call(arguments, item) === -1) {
+      var isHas = false
+      for (var j = 0; j < values.length; j++) {
+        if (item === values[j]) {
+          isHas = true
+          break
+        }
+      }
+      if (!isHas) {
         result.push(item)
       }
     }
     return result
   },
 
-  difference: function (arr, values) {
-    var result = []
-    for (var i = 0; i < ar.length; i++) {
-      if (values.indexOf(arr[i]) < 0) {
-        result.push(arr[i])
-      }
-    }
-    return result
-  },
-
-  // differenceBy: function (arr, values, iteratee) {
+  // differenceBy: function (arr, ...values, iteratee) {
   //   var result = []
-  //   for(var i = 0; i < ar.length; i++){
-  //     if(values.indexOf(arr[i]) < 0){
+  //   for (var i = 0; i < arr.length; i++) {
+  //     if (values.indexOf(arr[i]) < 0) {
   //       result.push(arr[i])
   //     }
   //   }
