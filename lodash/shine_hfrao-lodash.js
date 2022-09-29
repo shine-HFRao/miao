@@ -90,11 +90,11 @@ var shine_hfrao = {
 
   // 创建一个切片数组，去除array中从起点开始到 predicate 返回假值结束部分。predicate 会传入3个参数： (value, index, array)。
   dropWhile: function (arr, predicate) {
-    var result = []
+    // var result = []
     for (var i = 0; i < arr.length; i++) {
       if (Object.prototype.toString.call(predicate) === '[object Function]') {
         if (!predicate(arr[i], i, arr)) {
-          result.push(arr[i])
+          arr.splice(i)
         }
       }
       if (Object.prototype.toString.call(predicate) === '[object Object]') {
@@ -105,7 +105,7 @@ var shine_hfrao = {
           }
         }
         if (!is) {
-          result.push(arr[i])
+          arr.splice(i)
         }
       }
       if (Object.prototype.toString.call(predicate) === '[object Array]') {
@@ -120,7 +120,7 @@ var shine_hfrao = {
       }
     }
 
-    return result
+    return arr
   },
 
   // 创建一个切片数组，去除array中从 predicate 返回假值开始到尾部的部分。predicate 会传入3个参数： (value, index, array)。
@@ -237,7 +237,7 @@ var shine_hfrao = {
       return -1
     }
     if (typeof predicate === 'string') {
-      for (var i = fromIndex; i < array.length; i++) {
+      for (var i = fromIndex; i >= 0; i--) {
         if (array[i][predicate] === true) {
           return i
         }
