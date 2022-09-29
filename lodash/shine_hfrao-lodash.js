@@ -80,7 +80,7 @@ var shine_hfrao = {
   },
 
   // 删除数组尾部的 n 个元素，返回删除后的原数组
-  dropRight: function (arr, n = 0) {
+  dropRight: function (arr, n = 1) {
     if (n > arr.length) {
       n = arr.length
     }
@@ -94,8 +94,7 @@ var shine_hfrao = {
     for (var i = 0; i < arr.length; i++) {
       if (Object.prototype.toString.call(predicate) === '[object Function]') {
         if (!predicate(arr[i], i, arr)) {
-          arr.splice(i, 1)
-          return arr
+          result.push(arr[i])
         }
       }
       if (Object.prototype.toString.call(predicate) === '[object Object]') {
@@ -159,15 +158,82 @@ var shine_hfrao = {
     return result
   },
 
-  // findIndex: function (array, predicate) {
-  //   for (var i = 0; i < array.length; i++) {
-  //     if (predicate(array[i], i, array)) {
-  //       return i
-  //     }
-  //   }
-  // }
+  findIndex: function (array, predicate, fromIndex = 0) {
+    if (typeof predicate === 'function') {
+      for (var i = fromIndex; i < array.length; i++) {
+        if (predicate(array[i], i, array)) {
+          return i
+        }
+      }
+      return -1
+    }
+    if (Array.isArray(predicate)) {
+      if (array[i][predicate[0]] === predicate[1]) {
+        return i
+      }
+      return -1
+    }
+    if (typeof predicate === 'object') {
+      for (var i = fromIndex; i < array.length; i++) {
+        var is = true
+        for (key in array[i]) {
+          if (array[i][key] !== predicate[key]) {
+            is = false
+            break
+          }
+        }
+        if (is) {
+          return i
+        }
+      }
+      return -1
+    }
+    if (typeof predicate === 'string') {
+      if (array[i][predicate] === true) {
+        return i
+      }
+      return -1
+    }
 
-  // findLastIndex
+  },
+
+  findLastIndex: function (array, predicate, fromIndex = array.length - 1) {
+    if (typeof predicate === 'function') {
+      for (var i = fromIndex; i >= 0; i--) {
+        if (predicate(array[i], i, array)) {
+          return i
+        }
+      }
+      return -1
+    }
+    if (Array.isArray(predicate)) {
+      if (array[i][predicate[0]] === predicate[1]) {
+        return i
+      }
+      return -1
+    }
+    if (typeof predicate === 'object') {
+      for (var i = fromIndex; i < array.length; i++) {
+        var is = true
+        for (key in array[i]) {
+          if (array[i][key] !== predicate[key]) {
+            is = false
+            break
+          }
+        }
+        if (is) {
+          return i
+        }
+      }
+      return -1
+    }
+    if (typeof predicate === 'string') {
+      if (array[i][predicate] === true) {
+        return i
+      }
+      return -1
+    }
+  },
 
   flatten: function (array) {
     return array.reduce(function (result, item, index, array) {
