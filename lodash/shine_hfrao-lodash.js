@@ -201,8 +201,9 @@ var shine_hfrao = {
     return arr
   },
 
-  difference: function (arr, values) {
+  difference: function (arr, ...values) {
     var result = []
+    values = this.flatten(values)
     for (var i = 0; i < arr.length; i++) {
       var item = arr[i]
       var isHas = false
