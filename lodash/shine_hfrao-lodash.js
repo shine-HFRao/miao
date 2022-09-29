@@ -90,14 +90,18 @@ var shine_hfrao = {
 
   // 创建一个切片数组，去除array中从起点开始到 predicate 返回假值结束部分。predicate 会传入3个参数： (value, index, array)。
   dropWhile: function (arr, predicate) {
-    // var result = []
-    for (var i = 0; i < arr.length; i++) {
-      if (Object.prototype.toString.call(predicate) === '[object Function]') {
+
+    if (Object.prototype.toString.call(predicate) === '[object Function]') {
+      for (var i = 0; i < arr.length; i++) {
         if (!predicate(arr[i], i, arr)) {
-          arr.splice(i)
+          arr.splice(0, i)
+          return arr
         }
       }
-      if (Object.prototype.toString.call(predicate) === '[object Object]') {
+      return arr
+    }
+    if (Object.prototype.toString.call(predicate) === '[object Object]') {
+      for (var i = 0; i < arr.length; i++) {
         var is = true
         for (key in arr[i]) {
           if (arr[i][key] !== predicate[key]) {
@@ -105,34 +109,49 @@ var shine_hfrao = {
           }
         }
         if (!is) {
-          arr.splice(i)
+          arr.splice(0, i)
+          return arr
         }
       }
-      if (Object.prototype.toString.call(predicate) === '[object Array]') {
-        if (!(arr[i][predicate[0]] === predicate[1])) {
-          result.push(arr[i])
+      return arr
+
+    }
+    if (Object.prototype.toString.call(predicate) === '[object Array]') {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i][predicate[0]] !== predicate[1]) {
+          arr.splice(0, i)
+          return arr
         }
       }
-      if (Object.prototype.toString.call(predicate) === '[object String]') {
-        if (arr[i].hasOwnProperty(predicate)) {
-          result.push(arr[i])
+      return arr
+    }
+    if (Object.prototype.toString.call(predicate) === '[object String]') {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i][predicate] !== true) {
+          arr.splice(0, i)
+          return arr
         }
       }
+      return arr
     }
 
-    return arr
+
   },
 
   // 创建一个切片数组，去除array中从 predicate 返回假值开始到尾部的部分。predicate 会传入3个参数： (value, index, array)。
   dropRightWhile: function (arr, predicate) {
-    var result = []
-    for (var i = arr.length - 1; i >= 0; i--) {
-      if (Object.prototype.toString.call(predicate) === '[object Function]') {
+
+    if (Object.prototype.toString.call(predicate) === '[object Function]') {
+      for (var i = arr.length - 1; i >= 0; i--) {
         if (!predicate(arr[i], i, arr)) {
-          result.unshift(arr[i])
+          arr.splice(i + 1)
+          return arr
         }
       }
-      if (Object.prototype.toString.call(predicate) === '[object Object]') {
+      return arr
+    }
+    if (Object.prototype.toString.call(predicate) === '[object Object]') {
+      for (var i = arr.length - 1; i >= 0; i--) {
         var is = true
         for (key in arr[i]) {
           if (arr[i][key] !== predicate[key]) {
@@ -140,22 +159,30 @@ var shine_hfrao = {
           }
         }
         if (!is) {
-          result.unshift(arr[i])
+          arr.splice(i + 1)
+          return arr
         }
       }
-      if (Object.prototype.toString.call(predicate) === '[object Array]') {
-        if (!(arr[i][predicate[0]] === predicate[1])) {
-          result.unshift(arr[i])
-        }
-      }
-      if (Object.prototype.toString.call(predicate) === '[object String]') {
-        if (arr[i].hasOwnProperty(predicate)) {
-          result.unshift(arr[i])
-        }
-      }
+      return arr
     }
-
-    return result
+    if (Object.prototype.toString.call(predicate) === '[object Array]') {
+      for (var i = arr.length - 1; i >= 0; i--) {
+        if (arr[i][predicate[0]] !== predicate[1]) {
+          arr.splice(i + 1)
+          return arr
+        }
+      }
+      return arr
+    }
+    if (Object.prototype.toString.call(predicate) === '[object String]') {
+      for (var i = arr.length - 1; i >= 0; i--) {
+        if (arr[i][predicate] !== true) {
+          arr.splice(i + 1)
+          return arr
+        }
+      }
+      return arr
+    }
   },
 
   findIndex: function (array, predicate, fromIndex = 0) {
