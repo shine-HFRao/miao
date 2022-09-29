@@ -64,6 +64,7 @@ var shine_hfrao = {
     return arr
   },
 
+  //
   drop: function (arr, n) {
     if (n === undefined) {
       n = 1
@@ -76,6 +77,47 @@ var shine_hfrao = {
       n--
     }
     return arr
+  },
+
+  // 删除数组尾部的 n 个元素，返回删除后的原数组
+  dropRight: function (arr, n) {
+    arr.splice(arr.length - n)
+    return arr
+  },
+
+
+  dropRightWhile: function (arr, predicate) {
+    var result = []
+    for (var i = 0; i < arr.length; i++) {
+      if (Object.prototype.toString.call(predicate) === '[object Function]') {
+        if (!predicate(arr[i], i, arr)) {
+          result.push(arr[i])
+        }
+      }
+      if (Object.prototype.toString.call(predicate) === '[object Object]') {
+        var is = true
+        for (key in arr[i]) {
+          if (arr[i][key] !== predicate[key]) {
+            is = false
+          }
+        }
+        if (!is) {
+          result.push(arr[i])
+        }
+      }
+      if (Object.prototype.toString.call(predicate) === '[object Array]') {
+        if (!(arr[i][predicate[0]] === predicate[1])) {
+          result.push(arr[i])
+        }
+      }
+      if (Object.prototype.toString.call(predicate) === '[object String]') {
+        if (arr[i].hasOwnProperty(predicate)) {
+          result.push(arr[i])
+        }
+      }
+    }
+
+    return result
   },
 
   // findIndex: function (array, predicate) {
@@ -201,6 +243,7 @@ var shine_hfrao = {
     return arr
   },
 
+  // 过滤arr中的值等于values中的值，返回一个过滤值后的新数组
   difference: function (arr, ...values) {
     var result = []
     values = this.flatten(values)
@@ -221,12 +264,12 @@ var shine_hfrao = {
   },
 
   // differenceBy: function (arr, ...values, iteratee) {
-  //   var result = []
-  //   for (var i = 0; i < arr.length; i++) {
-  //     if (values.indexOf(arr[i]) < 0) {
-  //       result.push(arr[i])
-  //     }
-  //   }
-  //   return result
-  // }
+
+  // },
+
+  // differenceWith: function (arr, ...values, iteratee) {
+
+  // },
+
+
 }
