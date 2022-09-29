@@ -213,7 +213,7 @@ var shine_hfrao = {
       return -1
     }
     if (Array.isArray(predicate)) {
-      for (var i = fromIndex; i < array.length; i++) {
+      for (var i = fromIndex; i >= 0; i--) {
         if (array[i][predicate[0]] === predicate[1]) {
           return i
         }
@@ -222,7 +222,7 @@ var shine_hfrao = {
       return -1
     }
     if (typeof predicate === 'object') {
-      for (var i = fromIndex; i < array.length; i++) {
+      for (var i = fromIndex; i >= 0; i--) {
         var is = true
         for (key in array[i]) {
           if (array[i][key] !== predicate[key]) {
@@ -237,7 +237,7 @@ var shine_hfrao = {
       return -1
     }
     if (typeof predicate === 'string') {
-      for (var i = fromIndex; i < array.length; i++) {
+      for (var i = fromIndex; i >= 0; i--) {
         if (array[i][predicate] === true) {
           return i
         }
