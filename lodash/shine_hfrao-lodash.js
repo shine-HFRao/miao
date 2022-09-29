@@ -129,7 +129,7 @@ var shine_hfrao = {
     for (var i = arr.length - 1; i >= 0; i--) {
       if (Object.prototype.toString.call(predicate) === '[object Function]') {
         if (!predicate(arr[i], i, arr)) {
-          result.push(arr[i])
+          result.unshift(arr[i])
         }
       }
       if (Object.prototype.toString.call(predicate) === '[object Object]') {
@@ -140,17 +140,17 @@ var shine_hfrao = {
           }
         }
         if (!is) {
-          result.push(arr[i])
+          result.unshift(arr[i])
         }
       }
       if (Object.prototype.toString.call(predicate) === '[object Array]') {
         if (!(arr[i][predicate[0]] === predicate[1])) {
-          result.push(arr[i])
+          result.unshift(arr[i])
         }
       }
       if (Object.prototype.toString.call(predicate) === '[object String]') {
         if (arr[i].hasOwnProperty(predicate)) {
-          result.push(arr[i])
+          result.unshift(arr[i])
         }
       }
     }
@@ -237,7 +237,7 @@ var shine_hfrao = {
       return -1
     }
     if (typeof predicate === 'string') {
-      for (var i = fromIndex; i >= 0; i--) {
+      for (var i = fromIndex; i < array.length; i++) {
         if (array[i][predicate] === true) {
           return i
         }
