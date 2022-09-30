@@ -484,5 +484,29 @@ var shine_hfrao = {
       }
 
     }
+  },
+
+  intersectionWith: function (...arrays) {
+    var predicate = arrays[arrays.length - 1]
+    for (var i = 0; i < arrays[0].length; i++) {
+      var result = []
+      var firstValue = arrays[0][i]
+      var isHas = true
+      for (var j = 1; j < arrays.length - 1; j++) {
+        for (var k = 0; k < arrays[j].length; k++) {
+          if (predicate(firstValue, arrays[j][k])) {
+            isHas = true
+            break
+          } else {
+            isHas = false
+          }
+        }
+
+      }
+      if (isHas) {
+        result.push(firstValue)
+      }
+      return result
+    }
   }
 }
