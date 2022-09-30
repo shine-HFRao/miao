@@ -401,7 +401,7 @@ var shine_hfrao = {
   },
 
   pullAllBy: function (array, values, iteratee) {
-
+    var copyArray = array.slice()
     for (var i = 0; i < values.length; i++) {
       if (typeof iteratee === 'function') {
         var value = iteratee(values[i])
@@ -410,13 +410,13 @@ var shine_hfrao = {
         var value = values[i][iteratee]
       }
 
-      for (var j = 0; j < array.length; j++) {
+      for (var j = 0; j < copyArray.length; j++) {
         if (typeof iteratee === 'function') {
-          var arrayVal = iteratee(array[j])
+          var arrayVal = iteratee(copyArray[j])
         }
 
         if (typeof iteratee === 'string') {
-          var arrayVal = array[i][iteratee]
+          var arrayVal = copyArray[i][iteratee]
         }
 
         if (value !== arrayVal) {
@@ -444,7 +444,7 @@ var shine_hfrao = {
     var i = 0;
     var j = array.length - 1
     var medium
-    while (i >= j) {
+    while (i < j) {
       medium = array[i]
       array[i] = array[j]
       array[j] = medium
@@ -477,32 +477,58 @@ var shine_hfrao = {
   differenceBy: function (array, values, iteratee) {
     var result = []
     for (var i = 0; i < array.length; i++) {
+      var notAt = true
+      if (iteratee === undefined) {
+        var arrayVal = iteratee(initArrayVal)
+      }
+      if (Array.isArray(iteratee)) {
+
+      }
       if (typeof iteratee === 'function') {
-        var notAt = true
         var initArrayVal = array[i]
         var arrayVal = iteratee(initArrayVal)
       }
       if (typeof iteratee === 'string') {
-        var arrayVal = array[i][iteratee]
+        var objVal = array[i][iteratee]
       }
 
       for (var j = 0; j < values.length; j++) {
+        if (iteratee === undefined) {
+          var arrayVal = iteratee(initArrayVal)
+          if (value === arrayVal) {
+            notAt = false
+            break
+          }
+        }
         if (typeof iteratee === 'function') {
           var value = iteratee(values[j])
+          if (value === arrayVal) {
+            notAt = false
+            break
+          }
 
         }
-
         if (typeof iteratee === 'string') {
           var value = values[j][iteratee]
+          if (value === objVal) {
+            notAt = false
+            break
+          }
         }
 
-        if (value === arrayVal) {
-          notAt = false
-          break
-        }
+
       }
       if (notAt) {
-        result.push(initArrayVal)
+        if (iteratee === undefined) {
+          result.push(arrayVal)
+        }
+        if (typeof iteratee === 'function') {
+          result.push(initArrayVal)
+        }
+        if (typeof iteratee === 'string') {
+          result.push(array[i])
+        }
+
       }
     }
     return result
