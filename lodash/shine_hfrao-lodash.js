@@ -419,7 +419,7 @@ var shine_hfrao = {
           var arrayVal = array[i][iteratee]
         }
 
-        if (value === arrayVal) {
+        if (value !== arrayVal) {
           array.splice(j, 1)
         }
       }
@@ -442,7 +442,7 @@ var shine_hfrao = {
 
   reverse: function (array) {
     var i = 0;
-    var j = arrar.length - 1
+    var j = array.length - 1
     var medium
     while (i >= j) {
       medium = array[i]
@@ -476,28 +476,33 @@ var shine_hfrao = {
 
   differenceBy: function (array, values, iteratee) {
     var result = []
-    for (var i = 0; i < values.length; i++) {
+    for (var i = 0; i < array.length; i++) {
       if (typeof iteratee === 'function') {
-        var value = iteratee(values[i])
+        var notAt = true
+        var initArrayVal = array[i]
+        var arrayVal = iteratee(initArrayVal)
       }
       if (typeof iteratee === 'string') {
-        var value = values[i][iteratee]
+        var arrayVal = array[i][iteratee]
       }
 
-      for (var j = 0; j < array.length; j++) {
+      for (var j = 0; j < values.length; j++) {
         if (typeof iteratee === 'function') {
-          var initArrayVal = array[j]
-          var arrayVal = iteratee(initArrayVal)
+          var value = iteratee(values[j])
+
         }
 
         if (typeof iteratee === 'string') {
-          var initArrayVal = array[j]
-          var arrayVal = initArrayVal[iteratee]
+          var value = values[j][iteratee]
         }
 
-        if (value !== arrayVal) {
-          result.push(initArrayVal)
+        if (value === arrayVal) {
+          notAt = false
+          break
         }
+      }
+      if (notAt) {
+        result.push(initArrayVal)
       }
     }
     return result
@@ -616,7 +621,7 @@ var shine_hfrao = {
     if (n >= 0) {
       return array[n]
     } else {
-      return array[arr.length + n]
+      return array[array.length + n]
     }
   },
 
