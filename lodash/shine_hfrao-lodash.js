@@ -427,6 +427,33 @@ var shine_hfrao = {
     return array
   },
 
+  pullAllWith: function (array, values, comparator) {
+    for (var i = 0; i < values.length; i++) {
+      var value = values[i]
+      for (var j = 0; j < array.length; j++) {
+        var arrayVal = array[j]
+        if (comparator(value, arrayVal)) {
+          array.splice(j, 1)
+        }
+      }
+    }
+    return array
+  },
+
+  reverse: function (array) {
+    var i = 0;
+    var j = arrar.length - 1
+    var medium
+    while (i >= j) {
+      medium = array[i]
+      array[i] = array[j]
+      array[j] = medium
+      i++
+      j--
+    }
+    return array
+  },
+
   // 过滤arr中的值等于values中的值，返回一个过滤值后的新数组
   difference: function (arr, ...values) {
     var result = []
