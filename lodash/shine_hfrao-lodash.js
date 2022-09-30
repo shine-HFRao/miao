@@ -474,13 +474,48 @@ var shine_hfrao = {
     return result
   },
 
-  // differenceBy: function (arr, ...values, iteratee) {
+  differenceBy: function (array, values, iteratee) {
+    var result = []
+    for (var i = 0; i < values.length; i++) {
+      if (typeof iteratee === 'function') {
+        var value = iteratee(values[i])
+      }
+      if (typeof iteratee === 'string') {
+        var value = values[i][iteratee]
+      }
 
-  // },
+      for (var j = 0; j < array.length; j++) {
+        if (typeof iteratee === 'function') {
+          var initArrayVal = array[j]
+          var arrayVal = iteratee(initArrayVal)
+        }
 
-  // differenceWith: function (arr, ...values, iteratee) {
+        if (typeof iteratee === 'string') {
+          var initArrayVal = array[j]
+          var arrayVal = initArrayVal[iteratee]
+        }
 
-  // },
+        if (value !== arrayVal) {
+          result.push(initArrayVal)
+        }
+      }
+    }
+    return result
+  },
+
+  differenceWith: function (array, values, comparator) {
+    var result = []
+    for (var i = 0; i < values.length; i++) {
+      var value = values[i]
+      for (var j = 0; j < array.length; j++) {
+        var arrayVal = array[j]
+        if (!comparator(value, arrayVal)) {
+          result.push(arrayVal)
+        }
+      }
+    }
+    return result
+  },
 
   intersection: function (...arrays) {
     var result = []
@@ -583,5 +618,9 @@ var shine_hfrao = {
     } else {
       return array[arr.length + n]
     }
+  },
+
+  sortedIndex: function () {
+
   }
 }
