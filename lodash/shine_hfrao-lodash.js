@@ -390,8 +390,35 @@ var shine_hfrao = {
   pullAll: function (array, values) {
     for (var i = 0; i < values.length; i++) {
       var value = values[i]
-      for (var j = 0; j < values.length; j++) {
+      for (var j = 0; j < array.length; j++) {
         var arrayVal = array[j]
+        if (value === arrayVal) {
+          array.splice(j, 1)
+        }
+      }
+    }
+    return array
+  },
+
+  pullAllBy: function (array, values, iteratee) {
+
+    for (var i = 0; i < values.length; i++) {
+      if (typeof iteratee === 'function') {
+        var value = iteratee(values[i])
+      }
+      if (typeof iteratee === 'string') {
+        var value = values[i][iteratee]
+      }
+
+      for (var j = 0; j < array.length; j++) {
+        if (typeof iteratee === 'function') {
+          var arrayVal = iteratee(array[j])
+        }
+
+        if (typeof iteratee === 'string') {
+          var arrayVal = array[i][iteratee]
+        }
+
         if (value === arrayVal) {
           array.splice(j, 1)
         }
