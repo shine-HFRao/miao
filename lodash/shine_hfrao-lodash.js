@@ -387,6 +387,19 @@ var shine_hfrao = {
     return arr
   },
 
+  pullAll: function (array, values) {
+    for (var i = 0; i < values.length; i++) {
+      var value = values[i]
+      for (var j = 0; j < values.length; j++) {
+        var arrayVal = array[j]
+        if (value === arrayVal) {
+          array.splice(j, 1)
+        }
+      }
+    }
+    return array
+  },
+
   // 过滤arr中的值等于values中的值，返回一个过滤值后的新数组
   difference: function (arr, ...values) {
     var result = []
@@ -507,6 +520,14 @@ var shine_hfrao = {
         result.push(firstValue)
       }
       return result
+    }
+  },
+
+  nth: function (array, n) {
+    if (n >= 0) {
+      return array[n]
+    } else {
+      return array[arr.length + n]
     }
   }
 }
