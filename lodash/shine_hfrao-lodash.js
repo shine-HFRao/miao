@@ -437,7 +437,8 @@ var shine_hfrao = {
     for (var i = 0; i < arrays[0].length; i++) {
       if (typeof predicate === 'function') {
         var result = []
-        var itemFirst = predicate(arrays[0][i])
+        var initItem = arrays[0][i]
+        var itemFirst = predicate(initItem)
         var isHas = true
         for (var j = 1; j < arrays.length - 1; j++) {
           for (var k = 0; k < arrays[j].length; k++) {
@@ -451,7 +452,7 @@ var shine_hfrao = {
           }
         }
         if (isHas) {
-          result.push(itemFirst)
+          result.push(initItem)
         }
         return result
       }
