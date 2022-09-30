@@ -415,5 +415,73 @@ var shine_hfrao = {
 
   // },
 
+  intersection: function (...arrays) {
+    var result = []
+    for (var i = 0; i < arrays[0].length; i++) {
+      var item = arrays[0][i]
+      var isHas = true
+      for (var j = 1; j < arrays.length; j++) {
+        if (arrays[j].indexOf(item) < 0) {
+          isHas = false
+        }
+      }
+      if (isHas) {
+        result.push(item)
+      }
+    }
+    return result
+  },
 
+  intersectionBy: function (...arrays) {
+    var predicate = arrays[arrays.length - 1]
+    for (var i = 0; i < arrays[0].length; i++) {
+      if (typeof predicate === 'function') {
+        var result = []
+        var itemFirst = predicate(arrays[0][i])
+        var isHas = true
+        for (var j = 1; j < arrays.length - 1; j++) {
+          for (var k = 0; k < arrays[j].length; k++) {
+            var item = predicate(arrays[j][k])
+            if (item !== itemFirst) {
+              isHas = false
+            } else {
+              isHas = true
+              break
+            }
+          }
+        }
+        if (isHas) {
+          result.push(itemFirst)
+        }
+        return result
+      }
+
+      if (typeof predicate === 'string') {
+        for (var i = 0; i < arrays[0].length; i++) {
+          if (!arrays[0][i].hasOwnProperty(predicate)) {
+            return []
+          }
+          var result = []
+          var isHas = true
+          var itemFirst = arrays[0][i][predicate]
+          for (var j = 1; j < arrays.length - 1; j++) {
+            for (var k = 0; k < arrays[j].length; k++) {
+              if (itemFirst !== arrays[j][k][predicate]) {
+                isHas = false
+              } else {
+                isHas = true
+              }
+            }
+          }
+          if (isHas) {
+            var obj = {}
+            obj[predicate] = itemFirst
+            result.push(obj)
+          }
+          return result
+        }
+      }
+
+    }
+  }
 }
