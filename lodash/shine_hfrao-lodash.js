@@ -661,11 +661,12 @@ var shine_hfrao = (function () {
 
   }
   function sum(array) {
-    var result = 0
-    for (var i = 0; i < array.length; i++) {
-      result += array[i]
-    }
-    return result
+    // var result = 0
+    // for (var i = 0; i < array.length; i++) {
+    //   result += array[i]
+    // }
+    // return result
+    return sumBy(array, it => it)
   }
 
   function sumBy(array, predicate) {
@@ -678,25 +679,30 @@ var shine_hfrao = (function () {
   }
 
   function union(...arrays) {
-    var result = []
-    for (var array of arrays) {
-      for (var item of array) {
-        if (!result.includes(item)) {
-          result.push(item)
-        }
-      }
-    }
-    return result
+    // var result = new Set()
+    // for (var array of arrays) {
+    //   for (var item of array) {
+    //     if (!result.has(item)) {
+    //       result.add(item)
+    //     }
+    //   }
+    // }
+    // return [...result]
+    return unionBy(...arrays, it => it)
   }
 
   function unionBy(...arrays) {
     var result = []
-    var shadowResult = []
+    var set = new Set()
     var predicate = arrays.pop()
+    predicate = iteratee(predicate)
     for (var array of arrays) {
       for (var item of array) {
-        if (!shadowResult.includes(iteratee(predicate)(item))) {
+        var t = predicate(item)
+        if (!set.has(t)) {
           result.push(item)
+        } else {
+          set.add(t)
         }
       }
     }
