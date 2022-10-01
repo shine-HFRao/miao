@@ -666,11 +666,10 @@ var shine_hfrao = (function () {
     //   result += array[i]
     // }
     // return result
-    return sumBy(array, it => it)
+    return sumBy(array, identity)
   }
 
   function sumBy(array, predicate) {
-
     var result = 0
     for (var i = 0; i < array.length; i++) {
       result += iteratee(predicate)(array[i])
@@ -688,7 +687,7 @@ var shine_hfrao = (function () {
     //   }
     // }
     // return [...result]
-    return unionBy(...arrays, it => it)
+    return unionBy(...arrays, identity)
   }
 
   function unionBy(...arrays) {
@@ -709,7 +708,30 @@ var shine_hfrao = (function () {
     return result
   }
 
+  function uniq(array) {
+    return Array.from(new Set(array));
+  }
 
+  function uniqBy(array, predicate) {
+    predicate = iteratee(predicate)
+    var set = new Set()
+    var result = []
+    for (var item of array) {
+      var newItem = predicate(item)
+      if (!set.has(newItem)) {
+        set.add(newItem)
+        result.push(item)
+      }
+    }
+    return result
+  }
+
+  function uniqWith(array) {
+  }
+
+
+
+  // 一些需要被多个函数使用的函数
 
   // 判断 target 是否是 obj 的子集
   function isMatch(obj, target) {
@@ -755,7 +777,13 @@ var shine_hfrao = (function () {
       return matches(predicate)
     }
   }
+  function identity(val) {
+    return val
+  }
   return {
+    uniqBy,
+    uniq,
+    identity,
     union,
     unionBy,
     sumBy,
