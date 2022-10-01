@@ -1,30 +1,33 @@
-var shine_hfrao = {
-  // chunk: function (array, size = 1) {
-  //   var resultAry = []
-  //   var itemAry = []
-  //   var count = 0
 
-  //   for (var i = 0; i < array.length; i++) {
-  //     count++
-  //     if (count <= size) {
-  //       itemAry.push(array[i])
-  //     } else if (count > size) {
-  //       count = 0
-  //       resultAry.push(itemAry.slice())
-  //       itemAry = []
-  //       itemAry.push(array[i])
-  //     }
-  //   }
+// var shine_hfrao = {
+//   // chunk: function (array, size = 1) {
+//   //   var resultAry = []
+//   //   var itemAry = []
+//   //   var count = 0
 
-  //   if (itemAry.length) {
-  //     resultAry.push(itemAry.slice())
-  //   }
+//   //   for (var i = 0; i < array.length; i++) {
+//   //     count++
+//   //     if (count <= size) {
+//   //       itemAry.push(array[i])
+//   //     } else if (count > size) {
+//   //       count = 0
+//   //       resultAry.push(itemAry.slice())
+//   //       itemAry = []
+//   //       itemAry.push(array[i])
+//   //     }
+//   //   }
+//   //   if (itemAry.length) {
+//   //     resultAry.push(itemAry.slice())
+//   //   }
+//   //   return resultAry
+//   // },
 
-  //   return resultAry
-  // },
+//   // 转换"a=asdf&b=aef&c=3&c=2&c=5&d=wfe"为对象
 
-  // 转换"a=asdf&b=aef&c=3&c=2&c=5&d=wfe"为对象
-  parseQueryString: function (str) {
+// }
+
+var shine_hfrao = (function () {
+  function parseQueryString(str) {
     var obj = {}
     var pairs = str.split('&')
     pairs.forEach(function (pair) {
@@ -39,9 +42,9 @@ var shine_hfrao = {
       }
     })
     return obj
-  },
+  }
 
-  compact: function (arr) {
+  function compact(arr) {
     var newArr = []
     for (var i = 0; i < arr.length; i++) {
       if (arr[i]) {
@@ -49,9 +52,9 @@ var shine_hfrao = {
       }
     }
     return newArr
-  },
+  }
 
-  fill: function (arr, val, start, end) {
+  function fill(arr, val, start, end) {
     if (start === undefined) {
       start = 0
     }
@@ -62,10 +65,21 @@ var shine_hfrao = {
       arr[i] = val
     }
     return arr
-  },
+  }
 
+  function filter(array, predicate) {
+
+    predicate = iteratee(predicate)
+
+    var result = []
+    for (var i = 0; i < array.length; i++) {
+      if (predicate(array[i], i, array)) {
+        result.push(array[i])
+      }
+    }
+  }
   //
-  drop: function (arr, n) {
+  function drop(arr, n) {
     if (n === undefined) {
       n = 1
     }
@@ -77,19 +91,19 @@ var shine_hfrao = {
       n--
     }
     return arr
-  },
+  }
 
   // 删除数组尾部的 n 个元素，返回删除后的原数组
-  dropRight: function (arr, n = 1) {
+  function dropRight(arr, n = 1) {
     if (n > arr.length) {
       n = arr.length
     }
     arr.splice(arr.length - n)
     return arr
-  },
+  }
 
   // 创建一个切片数组，去除array中从起点开始到 predicate 返回假值结束部分。predicate 会传入3个参数： (value, index, array)。
-  dropWhile: function (arr, predicate) {
+  function dropWhile(arr, predicate) {
 
     if (Object.prototype.toString.call(predicate) === '[object Function]') {
       for (var i = 0; i < arr.length; i++) {
@@ -136,10 +150,10 @@ var shine_hfrao = {
     }
 
 
-  },
+  }
 
   // 创建一个切片数组，去除array中从 predicate 返回假值开始到尾部的部分。predicate 会传入3个参数： (value, index, array)。
-  dropRightWhile: function (arr, predicate) {
+  function dropRightWhile(arr, predicate) {
 
     if (Object.prototype.toString.call(predicate) === '[object Function]') {
       for (var i = arr.length - 1; i >= 0; i--) {
@@ -183,9 +197,9 @@ var shine_hfrao = {
       }
       return arr
     }
-  },
+  }
 
-  findIndex: function (array, predicate, fromIndex = 0) {
+  function findIndex(array, predicate, fromIndex = 0) {
     if (typeof predicate === 'function') {
       for (var i = fromIndex; i < array.length; i++) {
         if (predicate(array[i], i, array)) {
@@ -228,9 +242,9 @@ var shine_hfrao = {
       return -1
     }
 
-  },
+  }
 
-  findLastIndex: function (array, predicate, fromIndex = array.length - 1) {
+  function findLastIndex(array, predicate, fromIndex = array.length - 1) {
     if (typeof predicate === 'function') {
       for (var i = fromIndex; i >= 0; i--) {
         if (predicate(array[i], i, array)) {
@@ -272,17 +286,17 @@ var shine_hfrao = {
 
       return -1
     }
-  },
+  }
 
-  flatten: function (array) {
+  function flatten(array) {
     return array.reduce(function (result, item, index, array) {
 
       return result.concat(item)
 
     }, [])
-  },
+  }
 
-  flattenDeep: function flattenDeep(array) {
+  function flattenDeep(array) {
     return array.reduce(function (result, item, index, array) {
       if (Array.isArray(item)) {
         return result.concat(flattenDeep(item))
@@ -290,9 +304,9 @@ var shine_hfrao = {
         return result.concat(item)
       }
     }, [])
-  },
+  }
 
-  flattenDepth: function flattenDepth(array, depth = 1) {
+  function flattenDepth(array, depth = 1) {
     return array.reduce(function (result, item, index, array) {
       if (Array.isArray(item) && depth > 1) {
         depth--
@@ -301,59 +315,54 @@ var shine_hfrao = {
         return result.concat(item)
       }
     }, [])
-  },
+  }
 
 
-  chunk: function (arr, size) {
+  function chunk(array, size) {
     var result = [];
-    var startIndex = 0;
-    if (size >= arr.length) {
-      return arr.slice()
-    }
-    while (startIndex < arr.length) {
-      result.push(arr.slice(startIndex, startIndex + size))
-      startIndex += size
+    for (var i = 0; i < array.length; i += size) {
+      var part = array.slice(i, i + size)
+      result.push(part)
     }
     return result
-  },
-
-  fromPairs: function (arr) {
+  }
+  function fromPairs(arr) {
     var result = {}
     for (var i = 0; i < arr.length; i++) {
       result[arr[i][0]] = arr[i][1]
     }
     return result
-  },
+  }
 
-  head: function (arr) {
+  function head(arr) {
     return arr[0]
-  },
+  }
 
-  indexOf: function (arr, val, formIndex = 0) {
+  function indexOf(arr, val, formIndex = 0) {
     for (var i = formIndex; i < arr.length; i++) {
       if (arr[i] === val) {
         return i
       }
     }
     return -1
-  },
+  }
 
-  lastIndexOf: function (arr, val, lastIndex = arr.length - 1) {
+  function lastIndexOf(arr, val, lastIndex = arr.length - 1) {
     for (var i = lastIndex; i >= 0; i--) {
       if (arr[i] === val) {
         return i
       }
     }
     return -1
-  },
+  }
 
-  initial: function (arr) {
+  function initial(arr) {
     delete arr[arr.length - 1]
     arr.length--
     return arr
-  },
+  }
 
-  join: function (arr, separator = ',') {
+  function join(arr, separator = ',') {
     var str = ''
     for (var i = 0; i < arr.length; i++) {
       str += arr[i]
@@ -362,19 +371,17 @@ var shine_hfrao = {
       }
     }
     return str
-  },
+  }
 
-  last: function (arr) {
+  function last(arr) {
     if (arr.length) {
       return arr[arr.length - 1]
     }
-  },
+  }
 
-  remove: function () {
+  function remove() { }
 
-  },
-
-  pull: function (arr) {
+  function pull(arr) {
     for (var i = 1; i < arguments.length; i++) {
       var item = arguments[i]
 
@@ -385,9 +392,9 @@ var shine_hfrao = {
       }
     }
     return arr
-  },
+  }
 
-  pullAll: function (array, values) {
+  function pullAll(array, values) {
     for (var i = 0; i < values.length; i++) {
       var value = values[i]
       for (var j = 0; j < array.length; j++) {
@@ -398,9 +405,9 @@ var shine_hfrao = {
       }
     }
     return array
-  },
+  }
 
-  pullAllBy: function (array, values, iteratee) {
+  function pullAllBy(array, values, iteratee) {
     var copyArray = array.slice()
     for (var i = 0; i < values.length; i++) {
       if (typeof iteratee === 'function') {
@@ -425,9 +432,9 @@ var shine_hfrao = {
       }
     }
     return array
-  },
+  }
 
-  pullAllWith: function (array, values, comparator) {
+  function pullAllWith(array, values, comparator) {
     for (var i = 0; i < values.length; i++) {
       var value = values[i]
       for (var j = 0; j < array.length; j++) {
@@ -438,9 +445,9 @@ var shine_hfrao = {
       }
     }
     return array
-  },
+  }
 
-  reverse: function (array) {
+  function reverse(array) {
     var i = 0;
     var j = array.length - 1
     var medium
@@ -452,12 +459,12 @@ var shine_hfrao = {
       j--
     }
     return array
-  },
+  }
 
   // 过滤arr中的值等于values中的值，返回一个过滤值后的新数组
-  difference: function (arr, ...values) {
+  function difference(arr, ...values) {
     var result = []
-    values = this.flatten(values)
+    values = flatten(values)
     for (var i = 0; i < arr.length; i++) {
       var item = arr[i]
       var isHas = false
@@ -472,9 +479,8 @@ var shine_hfrao = {
       }
     }
     return result
-  },
-
-  differenceBy: function (array, values, iteratee) {
+  }
+  function differenceBy(array, values, iteratee) {
     var result = []
     for (var i = 0; i < array.length; i++) {
       var notAt = true
@@ -532,9 +538,9 @@ var shine_hfrao = {
       }
     }
     return result
-  },
+  }
 
-  differenceWith: function (array, values, comparator) {
+  function differenceWith(array, values, comparator) {
     var result = []
     for (var i = 0; i < values.length; i++) {
       var value = values[i]
@@ -546,9 +552,9 @@ var shine_hfrao = {
       }
     }
     return result
-  },
+  }
 
-  intersection: function (...arrays) {
+  function intersection(...arrays) {
     var result = []
     for (var i = 0; i < arrays[0].length; i++) {
       var item = arrays[0][i]
@@ -563,9 +569,9 @@ var shine_hfrao = {
       }
     }
     return result
-  },
+  }
 
-  intersectionBy: function (...arrays) {
+  function intersectionBy(...arrays) {
     var predicate = arrays[arrays.length - 1]
     for (var i = 0; i < arrays[0].length; i++) {
       if (typeof predicate === 'function') {
@@ -617,9 +623,9 @@ var shine_hfrao = {
       }
 
     }
-  },
+  }
 
-  intersectionWith: function (...arrays) {
+  function intersectionWith(...arrays) {
     var predicate = arrays[arrays.length - 1]
     for (var i = 0; i < arrays[0].length; i++) {
       var result = []
@@ -641,17 +647,102 @@ var shine_hfrao = {
       }
       return result
     }
-  },
+  }
 
-  nth: function (array, n) {
+  function nth(array, n) {
     if (n >= 0) {
       return array[n]
     } else {
       return array[array.length + n]
     }
-  },
+  }
 
-  sortedIndex: function () {
+  function sortedIndex() {
 
   }
-}
+  // 判断 target 是否是 obj 的子集
+  function isMatch(obj, target) {
+    for (var key in target) {
+      if (key in obj) {
+        if (obj[key] !== target[key]) {
+          return false
+        }
+      } else {
+        return false
+      }
+    }
+  }
+  function property(propName) {
+    return function (obj) {
+      return obj[propName]
+    }
+  }
+  function matches(target) {
+    return function (obj) {
+      return isMatch(obj, target)
+    }
+  }
+  function matchesProperty(pair) {
+    var [key, val] = pair
+    return function (obj) {
+      return obj[key] = val
+    }
+  }
+  function iteratee(predicate) {
+    if (typeof predicate === 'function') {
+      return predicate
+    }
+    if (typeof predicate === 'string') {
+      return property(predicate)
+
+    }
+    if (Array.isArray(predicate)) {
+      return matchesProperty(predicate)
+    }
+    if (typeof predicate === 'object') {
+      return matches(predicate)
+    }
+  }
+  return {
+    parseQueryString,
+    compact,
+    fill,
+    filter,
+    drop,
+    dropRight,
+    dropWhile,
+    dropRightWhile,
+    findIndex,
+    findLastIndex,
+    flatten,
+    flattenDeep,
+    flattenDepth,
+    chunk,
+    fromPairs,
+    head,
+    indexOf,
+    lastIndexOf,
+    initial,
+    join,
+    last,
+    remove,
+    pull,
+    pullAll,
+    pullAllBy,
+    pullAllWith,
+    reverse,
+    difference,
+    differenceBy,
+    differenceWith,
+    intersection,
+    intersectionBy,
+    intersectionWith,
+    nth,
+    sortedIndex,
+    matches,
+    isMatch,
+    matchesProperty,
+    property,
+    iteratee
+  }
+})()
