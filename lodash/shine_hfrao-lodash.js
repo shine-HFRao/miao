@@ -660,6 +660,21 @@ var shine_hfrao = (function () {
   function sortedIndex() {
 
   }
+  function sum(array) {
+    var result = 0
+    for (var i = 0; i < array.length; i++) {
+      result += array[i]
+    }
+    return result
+  }
+  function sumBy(array, predicate) {
+
+    var result = 0
+    for (var i = 0; i < array.length; i++) {
+      result += iteratee(predicate)(array[i])
+    }
+    return result
+  }
   // 判断 target 是否是 obj 的子集
   function isMatch(obj, target) {
     for (var key in target) {
@@ -704,6 +719,8 @@ var shine_hfrao = (function () {
     }
   }
   return {
+    sumBy,
+    sum,
     parseQueryString,
     compact,
     fill,
