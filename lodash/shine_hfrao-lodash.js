@@ -667,6 +667,7 @@ var shine_hfrao = (function () {
     }
     return result
   }
+
   function sumBy(array, predicate) {
 
     var result = 0
@@ -675,6 +676,35 @@ var shine_hfrao = (function () {
     }
     return result
   }
+
+  function union(...arrays) {
+    var result = []
+    for (var array of arrays) {
+      for (var item of array) {
+        if (!result.includes(item)) {
+          result.push(item)
+        }
+      }
+    }
+    return result
+  }
+
+  function unionBy(...arrays) {
+    var result = []
+    var shadowResult = []
+    var predicate = arrays.pop()
+    for (var array of arrays) {
+      for (var item of array) {
+        if (!shadowResult.includes(iteratee(predicate)(item))) {
+          result.push(item)
+        }
+      }
+    }
+    return result
+  }
+
+
+
   // 判断 target 是否是 obj 的子集
   function isMatch(obj, target) {
     for (var key in target) {
@@ -686,6 +716,7 @@ var shine_hfrao = (function () {
         return false
       }
     }
+    return true
   }
   function property(propName) {
     return function (obj) {
@@ -719,6 +750,8 @@ var shine_hfrao = (function () {
     }
   }
   return {
+    union,
+    unionBy,
     sumBy,
     sum,
     parseQueryString,
