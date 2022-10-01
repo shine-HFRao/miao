@@ -699,9 +699,8 @@ var shine_hfrao = (function () {
       for (var item of array) {
         var t = predicate(item)
         if (!set.has(t)) {
-          result.push(item)
-        } else {
           set.add(t)
+          result.push(item)
         }
       }
     }
