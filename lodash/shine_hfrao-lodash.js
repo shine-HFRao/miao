@@ -471,7 +471,7 @@ var shine_hfrao = (function () {
     return result
   }
   function differenceBy(array, ...values) {
-    if (typeof values[values.length - 1] === 'function') {
+    if (!Array.isArray(values[values.length - 1]) && 　typeof values[values.length - 1][0] !== 'number') {
       var predicate = values.pop()
       var predicate = iteratee(predicate)
     } else {
@@ -697,13 +697,13 @@ var shine_hfrao = (function () {
       if (source.hasOwnProperty(key)) {
         if (obj.hasOwnProperty(key)) {
           if (typeof key === 'object') {
-
+            return isMatch(obj[key], source[key])
           } else {
+            if (obj[key] !== source[key]) {
+              return false
+            }
+          }
 
-          }
-          if (obj[key] !== source[key]) {
-            return false
-          }
         } else {
           return false
         }
