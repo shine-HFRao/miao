@@ -470,14 +470,23 @@ var shine_hfrao = (function () {
     }
     return result
   }
-  function differenceBy(array, values, predicate) {
-    var predicate = iteratee(predicate)
+  function differenceBy(array, ...values) {
+    if (typeof values[values.length - 1] === 'function') {
+      var predicate = values.pop()
+      var predicate = iteratee(predicate)
+    } else {
+      var predicate = identity
+    }
     var result = []
+    var combineValues = []
+    for (var k = 0; k < values.length; k++) {
+      combineValues = combineValues.concat(values[k])
+    }
     for (var i = 0; i < array.length; i++) {
       var item = array[i]
       var isDiff = true
-      for (var j = 0; j < values.length; j++) {
-        var value = values[j]
+      for (var j = 0; j < combineValues.length; j++) {
+        var value = combineValues[j]
         if (predicate(item) === predicate(value)) {
           isDiff = false
           break
@@ -683,15 +692,23 @@ var shine_hfrao = (function () {
   // 一些需要被多个函数使用的函数
 
   // 判断 target 是否是 obj 的子集
-  function isMatch(obj, target) {
-    for (var key in target) {
-      if (key in obj) {
-        if (obj[key] !== target[key]) {
+  function isMatch(obj, source) {
+    for (var key in source) {
+      if (source.hasOwnProperty(key)) {
+        if (obj.hasOwnProperty(key)) {
+          if (typeof key === 'object') {
+
+          } else {
+
+          }
+          if (obj[key] !== source[key]) {
+            return false
+          }
+        } else {
           return false
         }
-      } else {
-        return false
       }
+
     }
     return true
   }
