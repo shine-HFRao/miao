@@ -410,7 +410,6 @@ var shine_hfrao = (function () {
 
   function pullAllBy(array, values, predicate) {
     var predicate = iteratee(predicate)
-    // var copyArray = array.slice()
     for (var i = 0; i < array.length; i++) {
       var item = array[i]
       for (var j = 0; j < values.length; j++) {
@@ -471,61 +470,21 @@ var shine_hfrao = (function () {
     }
     return result
   }
-  function differenceBy(array, values, iteratee) {
+  function differenceBy(array, values, predicate) {
+    var predicate = iteratee(predicate)
     var result = []
     for (var i = 0; i < array.length; i++) {
-      var notAt = true
-      if (iteratee === undefined) {
-        var arrayVal = iteratee(initArrayVal)
-      }
-      if (Array.isArray(iteratee)) {
-
-      }
-      if (typeof iteratee === 'function') {
-        var initArrayVal = array[i]
-        var arrayVal = iteratee(initArrayVal)
-      }
-      if (typeof iteratee === 'string') {
-        var objVal = array[i][iteratee]
-      }
-
+      var item = array[i]
+      var isDiff = true
       for (var j = 0; j < values.length; j++) {
-        if (iteratee === undefined) {
-          var arrayVal = iteratee(initArrayVal)
-          if (value === arrayVal) {
-            notAt = false
-            break
-          }
+        var value = values[j]
+        if (predicate(item) === predicate(value)) {
+          isDiff = false
+          break
         }
-        if (typeof iteratee === 'function') {
-          var value = iteratee(values[j])
-          if (value === arrayVal) {
-            notAt = false
-            break
-          }
-
-        }
-        if (typeof iteratee === 'string') {
-          var value = values[j][iteratee]
-          if (value === objVal) {
-            notAt = false
-            break
-          }
-        }
-
-
       }
-      if (notAt) {
-        if (iteratee === undefined) {
-          result.push(arrayVal)
-        }
-        if (typeof iteratee === 'function') {
-          result.push(initArrayVal)
-        }
-        if (typeof iteratee === 'string') {
-          result.push(array[i])
-        }
-
+      if (isDiff) {
+        result.push(item)
       }
     }
     return result
