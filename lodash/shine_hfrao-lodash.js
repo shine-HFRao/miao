@@ -395,39 +395,30 @@ var shine_hfrao = (function () {
   }
 
   function pullAll(array, values) {
-    for (var i = 0; i < values.length; i++) {
-      var value = values[i]
-      for (var j = 0; j < array.length; j++) {
-        var arrayVal = array[j]
-        if (value === arrayVal) {
-          array.splice(j, 1)
-        }
-      }
-    }
-    return array
+    // for (var i = 0; i < values.length; i++) {
+    //   var value = values[i]
+    //   for (var j = 0; j < array.length; j++) {
+    //     var arrayVal = array[j]
+    //     if (value === arrayVal) {
+    //       array.splice(j, 1)
+    //     }
+    //   }
+    // }
+    // return array
+    return pullAllBy(array, values, identity)
   }
 
-  function pullAllBy(array, values, iteratee) {
-    var copyArray = array.slice()
-    for (var i = 0; i < values.length; i++) {
-      if (typeof iteratee === 'function') {
-        var value = iteratee(values[i])
-      }
-      if (typeof iteratee === 'string') {
-        var value = values[i][iteratee]
-      }
-
-      for (var j = 0; j < copyArray.length; j++) {
-        if (typeof iteratee === 'function') {
-          var arrayVal = iteratee(copyArray[j])
-        }
-
-        if (typeof iteratee === 'string') {
-          var arrayVal = copyArray[i][iteratee]
-        }
-
-        if (value !== arrayVal) {
-          array.splice(j, 1)
+  function pullAllBy(array, values, predicate) {
+    var predicate = iteratee(predicate)
+    // var copyArray = array.slice()
+    for (var i = 0; i < array.length; i++) {
+      var item = array[i]
+      for (var j = 0; j < values.length; j++) {
+        var value = values[j]
+        if (predicate(item) === predicate(value)) {
+          array.splice(i, 1)
+          i--
+          break
         }
       }
     }
