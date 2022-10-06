@@ -755,11 +755,20 @@ var shine_hfrao = (function () {
     return array.splice(array.length - n)
   }
 
+  function takeWhile(array, predicate) {
+    predicate = iteratee(predicate)
+    for (var i = 0; i < array.length; i++) {
+      if (!predicate(array[i], i, array)) {
+        return array.splice(0, i)
+      }
+    }
+  }
+
   function takeRightWhile(array, predicate) {
     predicate = iteratee(predicate)
     for (var i = array.length - 1; i >= 0; i--) {
-      if (predicate(array[i], i, array)) {
-
+      if (!predicate(array[i], i, array)) {
+        return array.splice(i + 1)
       }
     }
   }
@@ -784,7 +793,6 @@ var shine_hfrao = (function () {
             }
           }
           return true
-
         }
         if (Object.prototype.toString.call(value) === '[object Array]' && Object.prototype.toString.call(other) === '[object Array]') {
           if (mapCache.has(value)) {
@@ -805,6 +813,10 @@ var shine_hfrao = (function () {
       }
     }
     return realIsEqual(value, other)
+  }
+
+  function isEqualWith(value, other, customizer) {
+
   }
 
 
@@ -831,15 +843,15 @@ var shine_hfrao = (function () {
       return obj[propName]
     }
   }
-  function matches(target) {
+  function matches(source) {
     return function (obj) {
-      return isMatch(obj, target)
+      return isMatch(obj, source)
     }
   }
   function matchesProperty(pair) {
     var [key, val] = pair
     return function (obj) {
-      return obj[key] = val
+      return obj[key] == val
     }
   }
   function iteratee(predicate) {
@@ -861,7 +873,10 @@ var shine_hfrao = (function () {
     return val
   }
   return {
+
     isEqual,
+    isEqualWith,
+    takeWhile,
     takeRightWhile,
     takeRight,
     take,
