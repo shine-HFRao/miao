@@ -471,7 +471,7 @@ var shine_hfrao = (function () {
     return result
   }
   function differenceBy(array, ...values) {
-    if (!Array.isArray(values[values.length - 1]) && 　typeof values[values.length - 1][0] !== 'number') {
+    if (!Array.isArray(values[values.length - 1]) && typeof values[values.length - 1][0] !== 'number') {
       var predicate = values.pop()
       var predicate = iteratee(predicate)
     } else {
@@ -616,7 +616,7 @@ var shine_hfrao = (function () {
     }
   }
 
-  function sortedIndex() {
+  function sortedIndex(array, value) {
 
   }
   function sum(array) {
@@ -687,8 +687,124 @@ var shine_hfrao = (function () {
   function uniqWith(array) {
   }
 
+  function clone(value) {
+    if (value && typeof value === 'object') {
+      var result = {}
+      for (var key in value) {
+        if (value.hasOwnProperty(key)) {
+          result[key] = value[key]
+        }
+      }
+      return result
+    } else {
+      return value
+    }
+  }
+
+  function deepClone(value) {
+    var map = new Map()	// 记录深层的对象中指向包含他的对象形成环的情况，要用map记录已克隆过的对象
+    function realDeepClone(value) {
+      if (value && typeof value === 'object') {
+        if (map.has(value)) {
+          return map.get(value)
+        }
+        var result = {}
+        map.set(value, result)
+        for (var key in value) {
+          if (value.hasOwnProperty(key)) {
+            result[key] = realDeepClone(value[key])
+          }
+        }
+        return result
+      } else {
+        return value
+      }
+    }
+    return realDeepClone(value)
+  }
+
+  function shuffle(array) { //随机打乱数组，数组被均匀随机打乱
+    for (var i = array.length - 1; i > 0; i--) {
+      var randomIdx = i * Math.random() | 0   // 向下取整
+      swap(array, randomIdx, i - 1)
+    }
+    return array
+  }
+
+  function swap(array, preIndex, lastIndex) {
+    var medium = array[preIndex]
+    array[preIndex] = array[lastIndex]
+    array[lastIndex] = medium
+    return array
+  }
+
+  function tail(array) {
+    array.shift()
+    return array
+  }
+
+  function take(array, n = 1) {
+    array.splice(n)
+    return array
+  }
+
+  function takeRight(array, n = 1) {
+    if (n >= array.length) {
+      return array
+    }
+    return array.splice(array.length - n)
+  }
+
+  function takeRightWhile(array, predicate) {
+    predicate = iteratee(predicate)
+    for (var i = array.length - 1; i >= 0; i--) {
+      if (predicate(array[i], i, array)) {
+
+      }
+    }
+  }
+
+  function isEqual(value, other) {
+    var mapCache = new Map()
+    function realIsEqual(value, other) {
+      if (value === other) {
+        return true
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Object]' && Object.prototype.toString.call(other) === '[object Object]') {
+          if (mapCache.has(value)) {
+            return mapCache.get(value)
+          }
+          if (Object.keys(value).length !== Object.keys(other).length) {
+            return false
+          }
+          for (key of Object.keys(value)) {
+            mapCache.set(value, isEqual(value[key], other[key]))
+            // return isEqual(value[key], other[key])
+            return mapCache.get(value)
+          }
+
+        }
+        if (Object.prototype.toString.call(value) === '[object Array]' && Object.prototype.toString.call(other) === '[object Array]') {
+          if (mapCache.has(value)) {
+            return mapCache.get(value)
+          }
+          if (value.length !== other.length) {
+            return false
+          }
+          for (var i = 0; i < value.length; i++) {
+            mapCache.set(value, isEqual(value[i], other[i]))
+            // return isEqual(value[i], other[i])
+            return mapCache.get(value)
+          }
+        }
+        return false
+      }
+    }
+    return realIsEqual(value, other)
+  }
 
 
+  ;
   // 一些需要被多个函数使用的函数
 
   // 判断 target 是否是 obj 的子集
@@ -747,6 +863,14 @@ var shine_hfrao = (function () {
     return val
   }
   return {
+    isEqual,
+    takeRightWhile,
+    takeRight,
+    take,
+    tail,
+    shuffle,
+    clone,
+    deepClone,
     uniqBy,
     uniq,
     identity,
