@@ -765,7 +765,7 @@ var shine_hfrao = (function () {
   }
 
   function isEqual(value, other) {
-    var mapCache = new Map()
+    var mapCache = new Map()  // 记录对象或数组产生环的时候，防止栈溢出
     function realIsEqual(value, other) {
       if (value === other) {
         return true
@@ -782,10 +782,7 @@ var shine_hfrao = (function () {
             if (!realIsEqual(value[key], other[key])) {
               return false
             }
-
           }
-
-          // return isEqual(value[key], other[key])
           return true
 
         }
@@ -801,10 +798,7 @@ var shine_hfrao = (function () {
             if (!realIsEqual(value[i], other[i])) {
               return false
             }
-
           }
-
-          // return isEqual(value[i], other[i])
           return true
         }
         return false
@@ -822,19 +816,13 @@ var shine_hfrao = (function () {
     for (var key in source) {
       if (source.hasOwnProperty(key)) {
         if (obj.hasOwnProperty(key)) {
-          if (typeof key === 'object') {
-            return isMatch(obj[key], source[key])
-          } else {
-            if (obj[key] !== source[key]) {
-              return false
-            }
+          if (!isEqual(obj[key], source[key])) {
+            return false
           }
-
         } else {
           return false
         }
       }
-
     }
     return true
   }
