@@ -774,28 +774,38 @@ var shine_hfrao = (function () {
           if (mapCache.has(value)) {
             return mapCache.get(value)
           }
+          mapCache.set(value, true)
           if (Object.keys(value).length !== Object.keys(other).length) {
             return false
           }
           for (key of Object.keys(value)) {
-            mapCache.set(value, isEqual(value[key], other[key]))
-            // return isEqual(value[key], other[key])
-            return mapCache.get(value)
+            if (!realIsEqual(value[key], other[key])) {
+              return false
+            }
+
           }
+
+          // return isEqual(value[key], other[key])
+          return true
 
         }
         if (Object.prototype.toString.call(value) === '[object Array]' && Object.prototype.toString.call(other) === '[object Array]') {
           if (mapCache.has(value)) {
             return mapCache.get(value)
           }
+          mapCache.set(value, true)
           if (value.length !== other.length) {
             return false
           }
           for (var i = 0; i < value.length; i++) {
-            mapCache.set(value, isEqual(value[i], other[i]))
-            // return isEqual(value[i], other[i])
-            return mapCache.get(value)
+            if (!realIsEqual(value[i], other[i])) {
+              return false
+            }
+
           }
+
+          // return isEqual(value[i], other[i])
+          return true
         }
         return false
       }
