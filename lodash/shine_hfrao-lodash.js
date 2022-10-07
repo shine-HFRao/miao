@@ -635,7 +635,7 @@ var shine_hfrao = (function () {
     }
     return result
   }
-
+  // 数组合并
   function union(...arrays) {
     // var result = new Set()
     // for (var array of arrays) {
@@ -666,6 +666,15 @@ var shine_hfrao = (function () {
     return result
   }
 
+  function unionWith(...arrays) {
+    var comparator = arrays.pop()
+    var result = []
+    for (let array of arrays) {
+      result = result.concat(array)
+    }
+    return uniqWith(result, comparator)
+  }
+  // 数组去重
   function uniq(array) {
     return Array.from(new Set(array));
   }
@@ -684,7 +693,17 @@ var shine_hfrao = (function () {
     return result
   }
 
-  function uniqWith(array) {
+  function uniqWith(array, comparator) {
+    for (var i = 0; i < array.length - 1; i++) {
+      for (var j = i + 1; j < array.length; j++) {
+        if (comparator(array[i], array[j])) {
+          array.splice(j, 1)
+          i--
+        }
+      }
+
+    }
+    return array
   }
 
   function clone(value) {
@@ -874,8 +893,7 @@ var shine_hfrao = (function () {
   }
   return {
 
-    isEqual,
-    isEqualWith,
+
     takeWhile,
     takeRightWhile,
     takeRight,
@@ -884,11 +902,15 @@ var shine_hfrao = (function () {
     shuffle,
     clone,
     deepClone,
+    isEqual,
+    isEqualWith,
+    identity,
     uniqBy,
     uniq,
-    identity,
+    uniqWith,
     union,
     unionBy,
+    unionWith,
     sumBy,
     sum,
     parseQueryString,
