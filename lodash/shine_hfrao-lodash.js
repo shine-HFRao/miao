@@ -706,6 +706,36 @@ var shine_hfrao = (function () {
     return array
   }
 
+
+  // var zipped = _.zip(['fred', 'barney'], [30, 40], [true, false]);
+  // => [['fred', 30, true], ['barney', 40, false]]
+  // _.unzip(zipped);
+  // => [['fred', 'barney'], [30, 40], [true, false]]
+  function unzip(array) {
+    return shine_hfrao.zip(...shine_hfrao.zip(...array));
+  }
+
+  // var zipped = _.zip([1, 2], [10, 20], [100, 200]);
+  // => [[1, 10, 100], [2, 20, 200]]
+  // _.unzipWith(zipped, _.add);
+  // => [3, 30, 300]
+  function unzipWith(arrays, iteratee) {
+    var result = []
+    for (var i = 0; i < arrays.length - 1; i++) {
+      for (var j = 0; j < arrays[i].length; j++) {
+
+        if (!result[j]) {
+          result[j] = iteratee(arrays[i][j], arrays[i + 1][j])
+        } else {
+          result[j] += iteratee(result[j], arrays[i + 1][j])
+        }
+
+      }
+    }
+    return result
+  }
+
+
   function clone(value) {
     if (value && typeof value === 'object') {
       var result = {}
@@ -837,9 +867,38 @@ var shine_hfrao = (function () {
   function isEqualWith(value, other, customizer) {
 
   }
+  // 实现
+  // _.zip(['fred', 'barney'], [30, 40], [true, false]);
+  // => [['fred', 30, true], ['barney', 40, false]]
+  function zip(...arrays) {
+    var result = []
+    for (var i = 0; i < arrays.length; i++) {
+
+      for (var j = 0; j < arrays[i].length; j++) {
+        if (!result[j]) {
+          result[j] = []
+        }
+        result[j][i] = arrays[i][j]
+      }
+    }
+    return result
+  }
+
+  function zipObject(props = [], values = []) {
+    var result = {}
+    for (var i = 0; i < props.length; i++) {
+      result[props[i]] = values[i]
+    }
+    return result
+  }
+
+  function zipObjectDeep(props = [], values = []) {
+
+  }
 
 
-  ;
+
+
   // 一些需要被多个函数使用的函数
 
   // 判断 target 是否是 obj 的子集
@@ -952,6 +1011,11 @@ var shine_hfrao = (function () {
     isMatch,
     matchesProperty,
     property,
-    iteratee
+    unzip,
+    unzipWith,
+    iteratee,
+    zip,
+    zipObject,
+    zipObjectDeep
   }
 })()
