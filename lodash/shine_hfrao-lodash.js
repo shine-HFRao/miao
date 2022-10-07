@@ -873,7 +873,6 @@ var shine_hfrao = (function () {
   function zip(...arrays) {
     var result = []
     for (var i = 0; i < arrays.length; i++) {
-
       for (var j = 0; j < arrays[i].length; j++) {
         if (!Array.isArray(result[j])) {
           result[j] = []
