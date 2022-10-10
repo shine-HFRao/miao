@@ -27,6 +27,9 @@
 // }
 
 var shine_hfrao = (function () {
+  function countBy() {
+
+  }
   function parseQueryString(str) {
     var obj = {}
     var pairs = str.split('&')
@@ -68,15 +71,14 @@ var shine_hfrao = (function () {
   }
 
   function filter(array, predicate) {
-
     predicate = iteratee(predicate)
-
     var result = []
     for (var i = 0; i < array.length; i++) {
       if (predicate(array[i], i, array)) {
         result.push(array[i])
       }
     }
+    return result
   }
   //
   function drop(arr, n) {
@@ -971,17 +973,20 @@ var shine_hfrao = (function () {
 
   // 判断 target 是否是 obj 的子集
   function isMatch(obj, source) {
-    for (var key in source) {
-      if (source.hasOwnProperty(key)) {
-        if (obj.hasOwnProperty(key)) {
-          if (!isEqual(obj[key], source[key])) {
+    if (source) {
+      for (var key in source) {
+        if (source.hasOwnProperty(key)) {
+          if (obj.hasOwnProperty(key)) {
+            if (!isEqual(obj[key], source[key])) {
+              return false
+            }
+          } else {
             return false
           }
-        } else {
-          return false
         }
       }
     }
+
     return true
   }
   function property(propName) {
