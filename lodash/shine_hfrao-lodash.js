@@ -928,12 +928,10 @@ var shine_hfrao = (function () {
   // => [['fred', 30, true], ['barney', 40, false]]
   function zip(...arrays) {
     var result = []
-    for (var i = 0; i < arrays.length; i++) {
-      for (var j = 0; j < arrays[i].length; j++) {
-        if (!Array.isArray(result[j])) {
-          result[j] = []
-        }
-        result[j][i] = arrays[i][j]
+    for (var i = 0; i < arrays[i].length; i++) {
+      result[i] = []
+      for (var j = 0; j < arrays.length; j++) {
+        result[i][j] = arrays[j][i]
       }
     }
     return result
@@ -951,6 +949,21 @@ var shine_hfrao = (function () {
 
   }
 
+  function zipWith(...arrays) {
+    let iteratee = arrays.pop()
+    var result = []
+    for (var i = 0; i < arrays[i].length; i++) {
+      let item = iteratee
+      for (var j = 0; j < arrays.length; j++) {
+        if (j === arrays.length - 1) {
+          result.push(item(arrays[j][i]))
+        }
+        item = item.bind(null, arrays[j][i])
+
+      }
+    }
+    return result
+  }
 
 
 
@@ -1073,6 +1086,7 @@ var shine_hfrao = (function () {
     xor,
     zip,
     zipObject,
-    zipObjectDeep
+    zipObjectDeep,
+    zipWith
   }
 })()
