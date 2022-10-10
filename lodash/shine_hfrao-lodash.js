@@ -706,7 +706,6 @@ var shine_hfrao = (function () {
     return array
   }
 
-
   // var zipped = _.zip(['fred', 'barney'], [30, 40], [true, false]);
   // => [['fred', 30, true], ['barney', 40, false]]
   // _.unzip(zipped);
@@ -867,6 +866,63 @@ var shine_hfrao = (function () {
   function isEqualWith(value, other, customizer) {
 
   }
+
+  function without(array, ...values) {
+    var result = []
+    for (var i = 0; i < array.length; i++) {
+      var isHas = false
+      for (var j = 0; j < values.length; j++) {
+        if (array[i] === values[j]) {
+          isHas = true
+          break
+        }
+      }
+      if (!isHas) {
+        result.push(array[i])
+      }
+    }
+    return result
+  }
+
+  function xor(...arrays) {
+    var result = new Set()
+    var mirror = new Set()
+    for (var i = 0; i < arrays.length; i++) {
+      arrays[i] = uniq(arrays[i])
+      for (var j = 0; j < arrays[i].length; j++) {
+        var item = arrays[i][j]
+        if (mirror.has(item)) {
+          result.delete(item)
+        } else {
+          mirror.add(item)
+          result.add(item)
+        }
+
+      }
+    }
+    return Array.from(result)
+  }
+
+  function xorBy(...arrays) {
+    var predicate = arrays.pop()
+    predicate = iteratee(predicate)
+    for (var i = 0; i < arrays.length; i++) {
+      // arrays[i] = uniq(arrays[i])
+      for (var j = 0; j < arrays[i].length; j++) {
+        array[i][j] = predicate(array[i][j])
+        var item = arrays[i][j]
+        if (mirror.has(item)) {
+          result.delete(item)
+        } else {
+          mirror.add(item)
+          result.add(item)
+        }
+
+      }
+    }
+  }
+
+
   // 实现
   // _.zip(['fred', 'barney'], [30, 40], [true, false]);
   // => [['fred', 30, true], ['barney', 40, false]]
@@ -1012,7 +1068,9 @@ var shine_hfrao = (function () {
     property,
     unzip,
     unzipWith,
+    without,
     iteratee,
+    xor,
     zip,
     zipObject,
     zipObjectDeep
