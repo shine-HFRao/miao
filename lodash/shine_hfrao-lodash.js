@@ -40,32 +40,90 @@ var shine_hfrao = (function () {
     }
     return result
   }
-  function parseQueryString(str) {
-    var obj = {}
-    var pairs = str.split('&')
-    pairs.forEach(function (pair) {
-      var [key, val] = pair.split('=')
-      if (obj.hasOwnProperty(key)) {
-        if (!Array.isArray(obj[key])) {
-          obj[key] = [obj[key]]
-        }
-        obj[key].push(val)
-      } else {
-        obj[key] = val
-      }
-    })
-    return obj
-  }
 
-  function compact(arr) {
-    var newArr = []
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i]) {
-        newArr.push(arr[i])
+  function every(collection, predicate) {
+    predicate = iteratee(predicate)
+    for (let item of collection) {
+      if (!predicate(item)) {
+        return false
       }
     }
-    return newArr
+    return true
   }
+
+  function find(collection, predicate, fromIndex) {
+    predicate = iteratee(predicate)
+    for (let i = 0; i < collection.length; i++) {
+      let item = collection[i]
+      if (predicate(item)) {
+        return item
+      }
+    }
+  }
+
+  function findLast(collection, predicate, fromIndex) {
+    predicate = iteratee(predicate)
+    for (let i = collection.length - 1; i >= 0; i--) {
+      let item = collection[i]
+      if (predicate(item)) {
+        return item
+      }
+    }
+  }
+
+  function flatten(array) {
+    flattenDepth(array)
+  }
+
+  function flattenDeep(array) {
+    flattenDepth(array, Infinity)
+  }
+
+  function flattenDepth(array, depth = 1) {
+    return array.reduce(function (result, item, index, array) {
+      if (Array.isArray(item)) {
+        if (depth-- > 0) {
+          return result.concat(flattenDepth(item, depth))
+        }
+      }
+      return result.concat(item)
+    }, [])
+  }
+
+  function flatMap(collection, predicate) {
+    // let result = [].concat(collection)
+    // predicate = iteratee(predicate)
+    // for (let item of collection) {
+    //   result.push(predicate(item))
+    // }
+    // return result
+    let newCollection = []
+    predicate = iteratee(predicate)
+    for (let i = 0; i < collection.length; i++) {
+      newCollection.push(predicate(collection[i]))
+    }
+    return flattenDepth(newCollection)
+  }
+
+  function flatMapDeep(collection, predicate) {
+    let newCollection = []
+    predicate = iteratee(predicate)
+    for (let i = 0; i < collection.length; i++) {
+      newCollection.push(predicate(collection[i]))
+    }
+    return flattenDepth(newCollection, Infinity)
+  }
+
+  function flatMapDepth(collection, predicate, depth = 1) {
+    let newCollection = []
+    predicate = iteratee(predicate)
+    for (let i = 0; i < collection.length; i++) {
+      newCollection.push(predicate(collection[i]))
+    }
+    return flattenDepth(newCollection, depth)
+
+  }
+
 
   function fill(arr, val, start, end) {
     if (start === undefined) {
@@ -89,126 +147,6 @@ var shine_hfrao = (function () {
       }
     }
     return result
-  }
-  //
-  function drop(arr, n) {
-    if (n === undefined) {
-      n = 1
-    }
-    if (n > arr.length) {
-      n = arr.length
-    }
-    while (n) {
-      arr.shift()
-      n--
-    }
-    return arr
-  }
-
-  // 删除数组尾部的 n 个元素，返回删除后的原数组
-  function dropRight(arr, n = 1) {
-    if (n > arr.length) {
-      n = arr.length
-    }
-    arr.splice(arr.length - n)
-    return arr
-  }
-
-  // 创建一个切片数组，去除array中从起点开始到 predicate 返回假值结束部分。predicate 会传入3个参数： (value, index, array)。
-  function dropWhile(arr, predicate) {
-
-    if (Object.prototype.toString.call(predicate) === '[object Function]') {
-      for (var i = 0; i < arr.length; i++) {
-        if (!predicate(arr[i], i, arr)) {
-          arr.splice(0, i)
-          return arr
-        }
-      }
-      return arr
-    }
-    if (Object.prototype.toString.call(predicate) === '[object Object]') {
-      for (var i = 0; i < arr.length; i++) {
-        var is = true
-        for (key in arr[i]) {
-          if (arr[i][key] !== predicate[key]) {
-            is = false
-          }
-        }
-        if (!is) {
-          arr.splice(0, i)
-          return arr
-        }
-      }
-      return arr
-
-    }
-    if (Object.prototype.toString.call(predicate) === '[object Array]') {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i][predicate[0]] !== predicate[1]) {
-          arr.splice(0, i)
-          return arr
-        }
-      }
-      return arr
-    }
-    if (Object.prototype.toString.call(predicate) === '[object String]') {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i][predicate] !== true) {
-          arr.splice(0, i)
-          return arr
-        }
-      }
-      return arr
-    }
-
-
-  }
-
-  // 创建一个切片数组，去除array中从 predicate 返回假值开始到尾部的部分。predicate 会传入3个参数： (value, index, array)。
-  function dropRightWhile(arr, predicate) {
-
-    if (Object.prototype.toString.call(predicate) === '[object Function]') {
-      for (var i = arr.length - 1; i >= 0; i--) {
-        if (!predicate(arr[i], i, arr)) {
-          arr.splice(i + 1)
-          return arr
-        }
-      }
-      return arr
-    }
-    if (Object.prototype.toString.call(predicate) === '[object Object]') {
-      for (var i = arr.length - 1; i >= 0; i--) {
-        var is = true
-        for (key in arr[i]) {
-          if (arr[i][key] !== predicate[key]) {
-            is = false
-          }
-        }
-        if (!is) {
-          arr.splice(i + 1)
-          return arr
-        }
-      }
-      return arr
-    }
-    if (Object.prototype.toString.call(predicate) === '[object Array]') {
-      for (var i = arr.length - 1; i >= 0; i--) {
-        if (arr[i][predicate[0]] !== predicate[1]) {
-          arr.splice(i + 1)
-          return arr
-        }
-      }
-      return arr
-    }
-    if (Object.prototype.toString.call(predicate) === '[object String]') {
-      for (var i = arr.length - 1; i >= 0; i--) {
-        if (arr[i][predicate] !== true) {
-          arr.splice(i + 1)
-          return arr
-        }
-      }
-      return arr
-    }
   }
 
   function findIndex(array, predicate, fromIndex = 0) {
@@ -329,6 +267,154 @@ var shine_hfrao = (function () {
     }, [])
   }
 
+  function parseQueryString(str) {
+    var obj = {}
+    var pairs = str.split('&')
+    pairs.forEach(function (pair) {
+      var [key, val] = pair.split('=')
+      if (obj.hasOwnProperty(key)) {
+        if (!Array.isArray(obj[key])) {
+          obj[key] = [obj[key]]
+        }
+        obj[key].push(val)
+      } else {
+        obj[key] = val
+      }
+    })
+    return obj
+  }
+
+  function compact(arr) {
+    var newArr = []
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i]) {
+        newArr.push(arr[i])
+      }
+    }
+    return newArr
+  }
+
+
+  //
+  function drop(arr, n) {
+    if (n === undefined) {
+      n = 1
+    }
+    if (n > arr.length) {
+      n = arr.length
+    }
+    while (n) {
+      arr.shift()
+      n--
+    }
+    return arr
+  }
+
+  // 删除数组尾部的 n 个元素，返回删除后的原数组
+  function dropRight(arr, n = 1) {
+    if (n > arr.length) {
+      n = arr.length
+    }
+    arr.splice(arr.length - n)
+    return arr
+  }
+
+  // 创建一个切片数组，去除array中从起点开始到 predicate 返回假值结束部分。predicate 会传入3个参数： (value, index, array)。
+  function dropWhile(arr, predicate) {
+
+    if (Object.prototype.toString.call(predicate) === '[object Function]') {
+      for (var i = 0; i < arr.length; i++) {
+        if (!predicate(arr[i], i, arr)) {
+          arr.splice(0, i)
+          return arr
+        }
+      }
+      return arr
+    }
+    if (Object.prototype.toString.call(predicate) === '[object Object]') {
+      for (var i = 0; i < arr.length; i++) {
+        var is = true
+        for (key in arr[i]) {
+          if (arr[i][key] !== predicate[key]) {
+            is = false
+          }
+        }
+        if (!is) {
+          arr.splice(0, i)
+          return arr
+        }
+      }
+      return arr
+
+    }
+    if (Object.prototype.toString.call(predicate) === '[object Array]') {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i][predicate[0]] !== predicate[1]) {
+          arr.splice(0, i)
+          return arr
+        }
+      }
+      return arr
+    }
+    if (Object.prototype.toString.call(predicate) === '[object String]') {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i][predicate] !== true) {
+          arr.splice(0, i)
+          return arr
+        }
+      }
+      return arr
+    }
+
+
+  }
+
+  // 创建一个切片数组，去除array中从 predicate 返回假值开始到尾部的部分。predicate 会传入3个参数： (value, index, array)。
+  function dropRightWhile(arr, predicate) {
+
+    if (Object.prototype.toString.call(predicate) === '[object Function]') {
+      for (var i = arr.length - 1; i >= 0; i--) {
+        if (!predicate(arr[i], i, arr)) {
+          arr.splice(i + 1)
+          return arr
+        }
+      }
+      return arr
+    }
+    if (Object.prototype.toString.call(predicate) === '[object Object]') {
+      for (var i = arr.length - 1; i >= 0; i--) {
+        var is = true
+        for (key in arr[i]) {
+          if (arr[i][key] !== predicate[key]) {
+            is = false
+          }
+        }
+        if (!is) {
+          arr.splice(i + 1)
+          return arr
+        }
+      }
+      return arr
+    }
+    if (Object.prototype.toString.call(predicate) === '[object Array]') {
+      for (var i = arr.length - 1; i >= 0; i--) {
+        if (arr[i][predicate[0]] !== predicate[1]) {
+          arr.splice(i + 1)
+          return arr
+        }
+      }
+      return arr
+    }
+    if (Object.prototype.toString.call(predicate) === '[object String]') {
+      for (var i = arr.length - 1; i >= 0; i--) {
+        if (arr[i][predicate] !== true) {
+          arr.splice(i + 1)
+          return arr
+        }
+      }
+      return arr
+    }
+  }
 
   function chunk(array, size) {
     var result = [];
@@ -1036,6 +1122,15 @@ var shine_hfrao = (function () {
   return {
 
     countBy,
+    every,
+    find,
+    findLast,
+    flatten,
+    flattenDeep,
+    flattenDepth,
+    flatMap,
+    flatMapDeep,
+    flatMapDepth,
     takeWhile,
     takeRightWhile,
     takeRight,
@@ -1065,9 +1160,6 @@ var shine_hfrao = (function () {
     dropRightWhile,
     findIndex,
     findLastIndex,
-    flatten,
-    flattenDeep,
-    flattenDepth,
     chunk,
     fromPairs,
     head,
