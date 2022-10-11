@@ -27,8 +27,18 @@
 // }
 
 var shine_hfrao = (function () {
-  function countBy() {
-
+  function countBy(collection, predicate) {
+    var result = {}
+    predicate = iteratee(predicate)
+    for (let value of collection) {
+      value = predicate(value)
+      if (result.hasOwnProperty(value)) {
+        result[value]++
+      } else {
+        result[value] = 1
+      }
+    }
+    return result
   }
   function parseQueryString(str) {
     var obj = {}
@@ -1025,7 +1035,7 @@ var shine_hfrao = (function () {
   }
   return {
 
-
+    countBy,
     takeWhile,
     takeRightWhile,
     takeRight,
