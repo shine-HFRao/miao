@@ -72,11 +72,11 @@ var shine_hfrao = (function () {
   }
 
   function flatten(array) {
-    flattenDepth(array)
+    return flattenDepth(array)
   }
 
   function flattenDeep(array) {
-    flattenDepth(array, Infinity)
+    return flattenDepth(array, Infinity)
   }
 
   function flattenDepth(array, depth = 1) {
