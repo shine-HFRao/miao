@@ -80,7 +80,6 @@ var shine_hfrao = (function () {
   }
 
   function flattenDepth(array, depth = 1) {
-    // var
     return array.reduce(function (result, item, index, array) {
       if (Array.isArray(item)) {
         if (depth > 1) {
@@ -93,12 +92,6 @@ var shine_hfrao = (function () {
   }
 
   function flatMap(collection, predicate) {
-    // let result = [].concat(collection)
-    // predicate = iteratee(predicate)
-    // for (let item of collection) {
-    //   result.push(predicate(item))
-    // }
-    // return result
     let newCollection = []
     predicate = iteratee(predicate)
     for (let i = 0; i < collection.length; i++) {
@@ -240,35 +233,6 @@ var shine_hfrao = (function () {
       return -1
     }
   }
-
-  // function flatten(array) {
-  //   return array.reduce(function (result, item, index, array) {
-
-  //     return result.concat(item)
-
-  //   }, [])
-  // }
-
-  // function flattenDeep(array) {
-  //   return array.reduce(function (result, item, index, array) {
-  //     if (Array.isArray(item)) {
-  //       return result.concat(flattenDeep(item))
-  //     } else {
-  //       return result.concat(item)
-  //     }
-  //   }, [])
-  // }
-
-  // function flattenDepth(array, depth = 1) {
-  //   return array.reduce(function (result, item, index, array) {
-  //     if (Array.isArray(item) && depth > 1) {
-  //       depth--
-  //       return result.concat(flattenDepth(item, depth))
-  //     } else {
-  //       return result.concat(item)
-  //     }
-  //   }, [])
-  // }
 
   function parseQueryString(str) {
     var obj = {}
