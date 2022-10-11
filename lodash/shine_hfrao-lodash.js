@@ -80,10 +80,12 @@ var shine_hfrao = (function () {
   }
 
   function flattenDepth(array, depth = 1) {
+    // var
     return array.reduce(function (result, item, index, array) {
       if (Array.isArray(item)) {
-        if (depth-- > 0) {
-          return result.concat(flattenDepth(item, depth))
+        if (depth > 1) {
+          var nextDepth = depth - 1
+          return result.concat(flattenDepth(item, nextDepth))
         }
       }
       return result.concat(item)
@@ -120,6 +122,7 @@ var shine_hfrao = (function () {
     for (let i = 0; i < collection.length; i++) {
       newCollection.push(predicate(collection[i]))
     }
+    console.log(newCollection.toString())
     return flattenDepth(newCollection, depth)
 
   }
@@ -238,34 +241,34 @@ var shine_hfrao = (function () {
     }
   }
 
-  function flatten(array) {
-    return array.reduce(function (result, item, index, array) {
+  // function flatten(array) {
+  //   return array.reduce(function (result, item, index, array) {
 
-      return result.concat(item)
+  //     return result.concat(item)
 
-    }, [])
-  }
+  //   }, [])
+  // }
 
-  function flattenDeep(array) {
-    return array.reduce(function (result, item, index, array) {
-      if (Array.isArray(item)) {
-        return result.concat(flattenDeep(item))
-      } else {
-        return result.concat(item)
-      }
-    }, [])
-  }
+  // function flattenDeep(array) {
+  //   return array.reduce(function (result, item, index, array) {
+  //     if (Array.isArray(item)) {
+  //       return result.concat(flattenDeep(item))
+  //     } else {
+  //       return result.concat(item)
+  //     }
+  //   }, [])
+  // }
 
-  function flattenDepth(array, depth = 1) {
-    return array.reduce(function (result, item, index, array) {
-      if (Array.isArray(item) && depth > 1) {
-        depth--
-        return result.concat(flattenDepth(item, depth))
-      } else {
-        return result.concat(item)
-      }
-    }, [])
-  }
+  // function flattenDepth(array, depth = 1) {
+  //   return array.reduce(function (result, item, index, array) {
+  //     if (Array.isArray(item) && depth > 1) {
+  //       depth--
+  //       return result.concat(flattenDepth(item, depth))
+  //     } else {
+  //       return result.concat(item)
+  //     }
+  //   }, [])
+  // }
 
   function parseQueryString(str) {
     var obj = {}
