@@ -776,7 +776,7 @@ var shine_hfrao = (function () {
   // _.unzip(zipped);
   // => [['fred', 'barney'], [30, 40], [true, false]]
   function unzip(array) {
-    return shine_hfrao.zip(...array);
+    return zip(...array);
   }
 
   // var zipped = _.zip([1, 2], [10, 20], [100, 200]);
@@ -993,10 +993,17 @@ var shine_hfrao = (function () {
   // => [['fred', 30, true], ['barney', 40, false]]
   function zip(...arrays) {
     var result = []
-    for (var i = 0; i < arrays[i].length; i++) {
-      result[i] = []
-      for (var j = 0; j < arrays.length; j++) {
-        result[i][j] = arrays[j][i]
+    var maxLen = 0
+    for (var i = 0; i < arrays.length; i++) {
+      if (arrays[i].length > maxLen) {
+        maxLen = arrays[i].length
+      }
+    }
+    // var result = Array(maxLen)
+    for (var j = 0; j < maxLen; j++) {
+      result[j] = []
+      for (var k = 0; k < arrays.length; k++) {
+        result[j][k] = arrays[k][j]
       }
     }
     return result
