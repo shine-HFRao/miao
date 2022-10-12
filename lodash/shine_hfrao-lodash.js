@@ -1168,8 +1168,6 @@ var shine_hfrao = (function () {
     shuffle,
     clone,
     deepClone,
-
-
     uniqBy,
     uniq,
     uniqWith,
