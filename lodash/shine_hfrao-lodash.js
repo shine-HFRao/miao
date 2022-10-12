@@ -234,6 +234,48 @@ var shine_hfrao = (function () {
     }
   }
 
+  function forEach(collection, iteratee) {
+    for (var i = 0; i < collection.length; i++) {
+      iteratee(collection[i])
+    }
+  }
+
+  function forEachRight(collection, iteratee) {
+    for (var i = collection.length - 1; i >= 0; i--) {
+      iteratee(collection[i])
+    }
+  }
+
+  function groupBy(collection, iteratee) {
+    predicate = iteratee(predicate)
+    var result = {}
+    for (let item of collection) {
+      let newItem = predicate(item)
+      if (!result.hasOwnProperty(newItem)) {
+        result[newItem] = []
+      }
+      result[newItem].push(item)
+    }
+    return result
+  }
+
+  function includes(collection, value, fromIndex) {
+
+  }
+
+  function invokeMap(collection, path, args) {
+    var result = []
+    for (let item of collection) {
+      if (typeof path === 'string') {
+        result.push(item[path](args))
+      }
+      if (typeof path === 'function') {
+        result.push(path.call(item, args))
+      }
+    }
+    return result
+  }
+
   function parseQueryString(str) {
     var obj = {}
     var pairs = str.split('&')
@@ -1105,6 +1147,17 @@ var shine_hfrao = (function () {
     flatMap,
     flatMapDeep,
     flatMapDepth,
+    forEach,
+    forEachRight,
+    groupBy,
+    invokeMap,
+    includes,
+    isEqual,
+    isEqualWith,
+    identity,
+    intersection,
+    intersectionBy,
+    intersectionWith,
     takeWhile,
     takeRightWhile,
     takeRight,
@@ -1113,9 +1166,8 @@ var shine_hfrao = (function () {
     shuffle,
     clone,
     deepClone,
-    isEqual,
-    isEqualWith,
-    identity,
+
+
     uniqBy,
     uniq,
     uniqWith,
@@ -1151,9 +1203,7 @@ var shine_hfrao = (function () {
     difference,
     differenceBy,
     differenceWith,
-    intersection,
-    intersectionBy,
-    intersectionWith,
+
     nth,
     sortedIndex,
     matches,
