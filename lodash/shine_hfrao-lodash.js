@@ -238,15 +238,17 @@ var shine_hfrao = (function () {
     for (var i = 0; i < collection.length; i++) {
       iteratee(collection[i])
     }
+    return collection
   }
 
   function forEachRight(collection, iteratee) {
     for (var i = collection.length - 1; i >= 0; i--) {
       iteratee(collection[i])
     }
+    return collection
   }
 
-  function groupBy(collection, iteratee) {
+  function groupBy(collection, predicate) {
     predicate = iteratee(predicate)
     var result = {}
     for (let item of collection) {
