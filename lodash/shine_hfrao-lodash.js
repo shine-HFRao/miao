@@ -665,7 +665,7 @@ var shine_hfrao = (function () {
     }
     for (let key in collection) {
 
-      result.push(predicate(collection[i], i, collection))
+      result.push(predicate(collection[key], key, collection))
     }
     return result
   }
@@ -799,7 +799,7 @@ var shine_hfrao = (function () {
         start--
       }
 
-      for (var i = start; i < collection.length; i++) {
+      for (var i = start; i >= 0; i--) {
         accumulator = iteratee(accumulator, collection[i], i, collection)
       }
       return accumulator
@@ -819,9 +819,9 @@ var shine_hfrao = (function () {
     for (let item of collection) {
       if (!predicate(item)) {
         result.push(item)
-        return result
       }
     }
+    return result
   }
 
   function nth(array, n) {
