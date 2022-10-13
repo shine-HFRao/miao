@@ -1,4 +1,3 @@
-
 // var shine_hfrao = {
 //   // chunk: function (array, size = 1) {
 //   //   var resultAry = []
@@ -180,6 +179,68 @@ var shine_hfrao = (function () {
     }
   }
 
+  // 过滤arr中的值等于values中的值，返回一个过滤值后的新数组
+  function difference(arr, ...values) {
+    var result = []
+    values = flatten(values)
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i]
+      var isHas = false
+      for (var j = 0; j < values.length; j++) {
+        if (item === values[j]) {
+          isHas = true
+          break
+        }
+      }
+      if (!isHas) {
+        result.push(item)
+      }
+    }
+    return result
+  }
+  function differenceBy(array, ...values) {
+    if (!Array.isArray(values[values.length - 1]) && typeof values[values.length - 1][0] !== 'number') {
+      var predicate = values.pop()
+      var predicate = iteratee(predicate)
+    } else {
+      var predicate = identity
+    }
+    var result = []
+    var combineValues = []
+    for (var k = 0; k < values.length; k++) {
+      combineValues = combineValues.concat(values[k])
+    }
+    for (var i = 0; i < array.length; i++) {
+      var item = array[i]
+      var isDiff = true
+      for (var j = 0; j < combineValues.length; j++) {
+        var value = combineValues[j]
+        if (predicate(item) === predicate(value)) {
+          isDiff = false
+          break
+        }
+      }
+      if (isDiff) {
+        result.push(item)
+      }
+    }
+    return result
+  }
+
+  function differenceWith(array, values, comparator) {
+    var result = []
+    for (var i = 0; i < values.length; i++) {
+      var value = values[i]
+      for (var j = 0; j < array.length; j++) {
+        var arrayVal = array[j]
+        if (!comparator(value, arrayVal)) {
+          result.push(arrayVal)
+        }
+      }
+    }
+    return result
+  }
+
   function every(collection, predicate) {
     predicate = iteratee(predicate)
     for (let item of collection) {
@@ -266,7 +327,6 @@ var shine_hfrao = (function () {
     return flattenDepth(newCollection, depth)
 
   }
-
 
   function fill(arr, val, start, end) {
     if (start === undefined) {
@@ -413,9 +473,6 @@ var shine_hfrao = (function () {
   }
 
   function includes(collection, value, fromIndex) {
-    if (typeof collection === 'string') {
-      return collection.includes(value, fromIndex)
-    }
     if (Array.isArray(collection)) {
       for (var i = fromIndex; i < collection.length; i++) {
         if (collection[i] === value) {
@@ -424,6 +481,10 @@ var shine_hfrao = (function () {
       }
       return false
     }
+    if (typeof collection === 'string') {
+      return collection.includes(value, fromIndex)
+    }
+
     if (typeof collection === 'object') {
       for (let item in collection) {
         if (collection[item] === value) {
@@ -469,198 +530,6 @@ var shine_hfrao = (function () {
     delete arr[arr.length - 1]
     arr.length--
     return arr
-  }
-
-  function join(arr, separator = ',') {
-    var str = ''
-    for (var i = 0; i < arr.length; i++) {
-      str += arr[i]
-      if (i !== arr.length - 1) {
-        str += separator
-      }
-    }
-    return str
-  }
-
-  function keyBy(collection, predicate) {
-    let result = {}
-    predicate = iteratee(predicate)
-    for (let item of collection) {
-      result[predicate(item)] = item
-    }
-    return result
-  }
-
-  function last(arr) {
-    if (arr.length) {
-      return arr[arr.length - 1]
-    }
-  }
-
-  function map(collection, predicate) {
-    let result = []
-    predicate = iteratee(predicate)
-    if (Array.isArray(collection)) {
-      for (var i = 0; i < collection.length; i++) {
-        result.push(predicate(collection[i]))
-      }
-      return result
-    }
-    for (let key in collection) {
-      result.push(predicate(collection[key]))
-    }
-    return result
-  }
-
-  function parseQueryString(str) {
-    var obj = {}
-    var pairs = str.split('&')
-    pairs.forEach(function (pair) {
-      var [key, val] = pair.split('=')
-      if (obj.hasOwnProperty(key)) {
-        if (!Array.isArray(obj[key])) {
-          obj[key] = [obj[key]]
-        }
-        obj[key].push(val)
-      } else {
-        obj[key] = val
-      }
-    })
-    return obj
-  }
-
-  function remove() { }
-
-  function pull(arr) {
-    for (var i = 1; i < arguments.length; i++) {
-      var item = arguments[i]
-
-      for (var j = 0; j < arr.length; j++) {
-        if (arr[j] === item) {
-          arr.splice(j, 1)
-        }
-      }
-    }
-    return arr
-  }
-
-  function pullAll(array, values) {
-    // for (var i = 0; i < values.length; i++) {
-    //   var value = values[i]
-    //   for (var j = 0; j < array.length; j++) {
-    //     var arrayVal = array[j]
-    //     if (value === arrayVal) {
-    //       array.splice(j, 1)
-    //     }
-    //   }
-    // }
-    // return array
-    return pullAllBy(array, values, identity)
-  }
-
-  function pullAllBy(array, values, predicate) {
-    var predicate = iteratee(predicate)
-    for (var i = 0; i < array.length; i++) {
-      var item = array[i]
-      for (var j = 0; j < values.length; j++) {
-        var value = values[j]
-        if (predicate(item) === predicate(value)) {
-          array.splice(i, 1)
-          i--
-          break
-        }
-      }
-    }
-    return array
-  }
-
-  function pullAllWith(array, values, comparator) {
-    for (var i = 0; i < values.length; i++) {
-      var value = values[i]
-      for (var j = 0; j < array.length; j++) {
-        var arrayVal = array[j]
-        if (comparator(value, arrayVal)) {
-          array.splice(j, 1)
-        }
-      }
-    }
-    return array
-  }
-
-  function reverse(array) {
-    var i = 0;
-    var j = array.length - 1
-    var medium
-    while (i < j) {
-      medium = array[i]
-      array[i] = array[j]
-      array[j] = medium
-      i++
-      j--
-    }
-    return array
-  }
-
-  // 过滤arr中的值等于values中的值，返回一个过滤值后的新数组
-  function difference(arr, ...values) {
-    var result = []
-    values = flatten(values)
-    for (var i = 0; i < arr.length; i++) {
-      var item = arr[i]
-      var isHas = false
-      for (var j = 0; j < values.length; j++) {
-        if (item === values[j]) {
-          isHas = true
-          break
-        }
-      }
-      if (!isHas) {
-        result.push(item)
-      }
-    }
-    return result
-  }
-  function differenceBy(array, ...values) {
-    if (!Array.isArray(values[values.length - 1]) && typeof values[values.length - 1][0] !== 'number') {
-      var predicate = values.pop()
-      var predicate = iteratee(predicate)
-    } else {
-      var predicate = identity
-    }
-    var result = []
-    var combineValues = []
-    for (var k = 0; k < values.length; k++) {
-      combineValues = combineValues.concat(values[k])
-    }
-    for (var i = 0; i < array.length; i++) {
-      var item = array[i]
-      var isDiff = true
-      for (var j = 0; j < combineValues.length; j++) {
-        var value = combineValues[j]
-        if (predicate(item) === predicate(value)) {
-          isDiff = false
-          break
-        }
-      }
-      if (isDiff) {
-        result.push(item)
-      }
-    }
-    return result
-  }
-
-  function differenceWith(array, values, comparator) {
-    var result = []
-    for (var i = 0; i < values.length; i++) {
-      var value = values[i]
-      for (var j = 0; j < array.length; j++) {
-        var arrayVal = array[j]
-        if (!comparator(value, arrayVal)) {
-          result.push(arrayVal)
-        }
-      }
-    }
-    return result
   }
 
   function intersection(...arrays) {
@@ -758,6 +627,188 @@ var shine_hfrao = (function () {
     }
   }
 
+  function join(arr, separator = ',') {
+    var str = ''
+    for (var i = 0; i < arr.length; i++) {
+      str += arr[i]
+      if (i !== arr.length - 1) {
+        str += separator
+      }
+    }
+    return str
+  }
+
+  function keyBy(collection, predicate) {
+    let result = {}
+    predicate = iteratee(predicate)
+    for (let item of collection) {
+      result[predicate(item)] = item
+    }
+    return result
+  }
+
+  function last(arr) {
+    if (arr.length) {
+      return arr[arr.length - 1]
+    }
+  }
+
+  function map(collection, predicate) {
+    let result = []
+    predicate = iteratee(predicate)
+    if (Array.isArray(collection)) {
+      for (var i = 0; i < collection.length; i++) {
+        result.push(predicate(collection[i]))
+      }
+      return result
+    }
+    for (let key in collection) {
+
+      result.push(predicate(collection[key]))
+    }
+    return result
+  }
+
+  function orderBy() {
+
+  }
+
+  function parseQueryString(str) {
+    var obj = {}
+    var pairs = str.split('&')
+    pairs.forEach(function (pair) {
+      var [key, val] = pair.split('=')
+      if (obj.hasOwnProperty(key)) {
+        if (!Array.isArray(obj[key])) {
+          obj[key] = [obj[key]]
+        }
+        obj[key].push(val)
+      } else {
+        obj[key] = val
+      }
+    })
+    return obj
+  }
+
+  function partition(collection, predicate) {
+    let result = [[], []]
+    predicate = iteratee(predicate)
+    for (let item of collection) {
+      if (predicate(item)) {
+        result[0].push(item)
+        continue
+      }
+      result[1].push(item)
+    }
+    return result
+  }
+
+
+  function pull(arr) {
+    for (var i = 1; i < arguments.length; i++) {
+      var item = arguments[i]
+
+      for (var j = 0; j < arr.length; j++) {
+        if (arr[j] === item) {
+          arr.splice(j, 1)
+        }
+      }
+    }
+    return arr
+  }
+
+  function pullAll(array, values) {
+    return pullAllBy(array, values, identity)
+  }
+
+  function pullAllBy(array, values, predicate) {
+    var predicate = iteratee(predicate)
+    for (var i = 0; i < array.length; i++) {
+      var item = array[i]
+      for (var j = 0; j < values.length; j++) {
+        var value = values[j]
+        if (predicate(item) === predicate(value)) {
+          array.splice(i, 1)
+          i--
+          break
+        }
+      }
+    }
+    return array
+  }
+
+  function pullAllWith(array, values, comparator) {
+    for (var i = 0; i < values.length; i++) {
+      var value = values[i]
+      for (var j = 0; j < array.length; j++) {
+        var arrayVal = array[j]
+        if (comparator(value, arrayVal)) {
+          array.splice(j, 1)
+        }
+      }
+    }
+    return array
+  }
+
+  function reverse(array) {
+    var i = 0;
+    var j = array.length - 1
+    var medium
+    while (i < j) {
+      medium = array[i]
+      array[i] = array[j]
+      array[j] = medium
+      i++
+      j--
+    }
+    return array
+  }
+
+  function remove() {
+
+  }
+
+  function reduce(collection, iteratee, accumulator) {
+    if (Array.isArray(collection)) {
+      for (var i = 0; i < collection.length; i++) {
+        accumulator = iteratee(accumulator, collection[i], i, collection)
+      }
+      return accumulator
+    }
+    for (let key in collection) {
+      if (collection.hasOwnProperty(key)) {
+        accumulator = iteratee(accumulator, collection[key], key, collection)
+      }
+
+    }
+    return accumulator
+  }
+
+  function reduceRight(collection, iteratee, accumulator) {
+    if (Array.isArray(collection)) {
+      for (var i = collection.length - 1; i >= 0; i--) {
+        accumulator = iteratee(accumulator, collection[i], i, collection)
+      }
+      return accumulator
+    }
+    for (let key in collection) {
+      if (collection.hasOwnProperty(key)) {
+        accumulator = iteratee(accumulator, collection[key], key, collection)
+      }
+
+    }
+    return accumulator
+  }
+
+  function reject(collection, predicate) {
+    predicate = iteratee(predicate)
+    for (let item of collection) {
+      if (!predicate(item)) {
+        return item
+      }
+    }
+  }
+
   function nth(array, n) {
     if (n >= 0) {
       return array[n]
@@ -785,6 +836,30 @@ var shine_hfrao = (function () {
     }
     return result
   }
+
+  function sample(collection) {
+    return collection[Math.random() * (collection.length) | 0]
+  }
+
+  function sampleSize(collection, n = 1) {
+    let result = []
+    for (var i = collection.length; i > collection.length - n; i--) {
+      var randomIdx = i * Math.random() | 0   // 向下取整
+      result.push(collection[randomIdx])
+      swap(collection, randomIdx, i - 1)
+    }
+    return result
+  }
+
+
+  function shuffle(array) { //随机打乱数组，数组被均匀随机打乱
+    for (var i = array.length; i > 0; i--) {
+      var randomIdx = i * Math.random() | 0   // 向下取整
+      swap(array, randomIdx, i - 1)
+    }
+    return array
+  }
+
   // 数组合并
   function union(...arrays) {
     // var result = new Set()
@@ -856,18 +931,10 @@ var shine_hfrao = (function () {
     return array
   }
 
-  // var zipped = _.zip(['fred', 'barney'], [30, 40], [true, false]);
-  // => [['fred', 30, true], ['barney', 40, false]]
-  // _.unzip(zipped);
-  // => [['fred', 'barney'], [30, 40], [true, false]]
   function unzip(array) {
     return zip(...array);
   }
 
-  // var zipped = _.zip([1, 2], [10, 20], [100, 200]);
-  // => [[1, 10, 100], [2, 20, 200]]
-  // _.unzipWith(zipped, _.add);
-  // => [3, 30, 300]
   function unzipWith(arrays, iteratee) {
     var result = []
     for (var i = 0; i < arrays.length - 1; i++) {
@@ -921,15 +988,10 @@ var shine_hfrao = (function () {
     return realDeepClone(value)
   }
 
-  function shuffle(array) { //随机打乱数组，数组被均匀随机打乱
-    for (var i = array.length - 1; i > 0; i--) {
-      var randomIdx = i * Math.random() | 0   // 向下取整
-      swap(array, randomIdx, i - 1)
-    }
-    return array
-  }
-
   function swap(array, preIndex, lastIndex) {
+    if (preIndex === lastIndex) {
+      return array
+    }
     var medium = array[preIndex]
     array[preIndex] = array[lastIndex]
     array[lastIndex] = medium
@@ -1123,7 +1185,6 @@ var shine_hfrao = (function () {
   }
 
 
-
   // 一些需要被多个函数使用的函数
 
   // 判断 target 是否是 obj 的子集
@@ -1145,6 +1206,17 @@ var shine_hfrao = (function () {
     return true
   }
   function property(propName) {
+    if (propName.includes('.')) {
+      let propNameArr = propName.split('.')
+
+      return function (obj) {
+        let result = obj
+        for (var i = 0; i < propNameArr.length; i++) {
+          result = result[propNameArr[i]]
+        }
+        return result
+      }
+    }
     return function (obj) {
       return obj[propName]
     }
@@ -1208,8 +1280,6 @@ var shine_hfrao = (function () {
     takeRight,
     take,
     tail,
-    shuffle,
-
     deepClone,
     uniqBy,
     uniq,
@@ -1217,8 +1287,7 @@ var shine_hfrao = (function () {
     union,
     unionBy,
     unionWith,
-    sumBy,
-    sum,
+
     parseQueryString,
     compact,
     fill,
@@ -1246,13 +1315,21 @@ var shine_hfrao = (function () {
     difference,
     differenceBy,
     differenceWith,
-
     nth,
     sortedIndex,
+    sample,
+    sampleSize,
+    sum,
+    sumBy,
+    shuffle,
     matches,
     isMatch,
     matchesProperty,
     property,
+    partition,
+    reduce,
+    reduceRight,
+    reject,
     unzip,
     unzipWith,
     without,
