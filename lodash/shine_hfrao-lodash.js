@@ -472,10 +472,18 @@ var shine_hfrao = (function () {
     return arr[0]
   }
 
-  function includes(collection, value, fromIndex) {
+  function includes(collection, value, fromIndex = 0) {
     if (Array.isArray(collection)) {
       for (var i = fromIndex; i < collection.length; i++) {
         if (collection[i] === value) {
+          return true
+        }
+      }
+      return false
+    }
+    if (typeof collection === 'object') {
+      for (let item in collection) {
+        if (collection[item] === value) {
           return true
         }
       }
@@ -485,14 +493,7 @@ var shine_hfrao = (function () {
       return collection.includes(value, fromIndex)
     }
 
-    if (typeof collection === 'object') {
-      for (let item in collection) {
-        if (collection[item] === value) {
-          return true
-        }
-      }
-      return false
-    }
+
   }
 
   function invokeMap(collection, path, args) {
@@ -658,13 +659,13 @@ var shine_hfrao = (function () {
     predicate = iteratee(predicate)
     if (Array.isArray(collection)) {
       for (var i = 0; i < collection.length; i++) {
-        result.push(predicate(collection[i]))
+        result.push(predicate(collection[i], i, collection))
       }
       return result
     }
     for (let key in collection) {
 
-      result.push(predicate(collection[key]))
+      result.push(predicate(collection[i], i, collection))
     }
     return result
   }
@@ -770,7 +771,13 @@ var shine_hfrao = (function () {
 
   function reduce(collection, iteratee, accumulator) {
     if (Array.isArray(collection)) {
-      for (var i = 0; i < collection.length; i++) {
+      let start = 0
+      if (accumulator === undefined) {
+        accumulator = collection[0]
+        start = 1
+      }
+
+      for (var i = start; i < collection.length; i++) {
         accumulator = iteratee(accumulator, collection[i], i, collection)
       }
       return accumulator
@@ -786,7 +793,13 @@ var shine_hfrao = (function () {
 
   function reduceRight(collection, iteratee, accumulator) {
     if (Array.isArray(collection)) {
-      for (var i = collection.length - 1; i >= 0; i--) {
+      let start = collection.length - 1
+      if (accumulator === undefined) {
+        accumulator = collection[collection.length - 1]
+        start--
+      }
+
+      for (var i = start; i < collection.length; i++) {
         accumulator = iteratee(accumulator, collection[i], i, collection)
       }
       return accumulator
@@ -801,10 +814,12 @@ var shine_hfrao = (function () {
   }
 
   function reject(collection, predicate) {
+    let result = []
     predicate = iteratee(predicate)
     for (let item of collection) {
       if (!predicate(item)) {
-        return item
+        result.push(item)
+        return result
       }
     }
   }
@@ -843,7 +858,7 @@ var shine_hfrao = (function () {
 
   function sampleSize(collection, n = 1) {
     let result = []
-    for (var i = collection.length; i > collection.length - n; i--) {
+    for (var i = collection.length; i > collection.length - n && i > 0; i--) {
       var randomIdx = i * Math.random() | 0   // 向下取整
       result.push(collection[randomIdx])
       swap(collection, randomIdx, i - 1)
