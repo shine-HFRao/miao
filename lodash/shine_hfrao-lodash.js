@@ -59,6 +59,32 @@ var shine_hfrao = (function () {
     return result
   }
 
+  function castArray(...values) {
+    if (Array.isArray(values[0])) {
+      return values[0]
+    }
+    let result = []
+    if (values.length) {
+      result.push(values[0])
+
+    }
+    return result
+  }
+
+  function conformsTo(object, source) {
+    // var isComply = true
+    for (var key in source) {
+      if (source.hasOwnProperty(key) && object.hasOwnProperty(key)) {
+        if (!source[key](object[key])) {
+          return false
+        }
+      } else {
+        return false
+      }
+    }
+    return true
+  }
+
   function drop(arr, n) {
     if (n === undefined) {
       n = 1
@@ -239,6 +265,20 @@ var shine_hfrao = (function () {
       }
     }
     return result
+  }
+
+  function defer(func, ...args) {
+    let time = setTimeout(() => {
+      func(...args)
+    }, 1)
+    return time
+  }
+
+  function delay(func, wait, ...args) {
+    let time = setTimeout(() => {
+      func(...args)
+    }, wait)
+    return time
   }
 
   function every(collection, predicate) {
@@ -1013,6 +1053,43 @@ var shine_hfrao = (function () {
     return array
   }
 
+  function size(collection) {
+    if (collection.hasOwnProperty(length)) {
+      return collection.length
+    }
+    var length = 0
+    for (var key in collection) {
+      length++
+    }
+    return length
+  }
+
+  function some(collection, predicate) {
+    predicate = iteratee(predicate)
+    for (let item of collection) {
+      if (predicate(item)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  function sortBy(collection, predicate) {
+    let result = collection.slice()
+    predicate = iteratee(predicate)
+    for (let j = 0; j < result.length - 1; j++) {
+      for (let i = 0; i < result.length - 1; i++) {
+        let pre = predicate(result[i])
+        let next = predicate(result[i + 1])
+        if (pre > next) {
+          swap(result, i, i + 1)
+        }
+      }
+    }
+
+    return result
+  }
+
   function tail(array) {
     array.shift()
     return array
@@ -1268,6 +1345,15 @@ var shine_hfrao = (function () {
   return {
     clone,
     countBy,
+    castArray,
+    conformsTo,
+    defer,
+    delay,
+    drop,
+    dropRight,
+    dropWhile,
+    dropRightWhile,
+    deepClone,
     every,
     find,
     findLast,
@@ -1295,7 +1381,7 @@ var shine_hfrao = (function () {
     takeRight,
     take,
     tail,
-    deepClone,
+
     uniqBy,
     uniq,
     uniqWith,
@@ -1307,10 +1393,7 @@ var shine_hfrao = (function () {
     compact,
     fill,
     filter,
-    drop,
-    dropRight,
-    dropWhile,
-    dropRightWhile,
+
     findIndex,
     findLastIndex,
     chunk,
@@ -1337,6 +1420,8 @@ var shine_hfrao = (function () {
     sum,
     sumBy,
     shuffle,
+    some,
+    sortBy,
     matches,
     isMatch,
     matchesProperty,
