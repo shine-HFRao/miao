@@ -85,6 +85,42 @@ var shine_hfrao = (function () {
     return true
   }
 
+  function clone(value) {
+    if (value && typeof value === 'object') {
+      var result = {}
+      for (var key in value) {
+        if (value.hasOwnProperty(key)) {
+          result[key] = value[key]
+        }
+      }
+      return result
+    } else {
+      return value
+    }
+  }
+
+  function deepClone(value) {
+    var map = new Map()	// 记录深层的对象中指向包含他的对象形成环的情况，要用map记录已克隆过的对象
+    function realDeepClone(value) {
+      if (value && typeof value === 'object') {
+        if (map.has(value)) {
+          return map.get(value)
+        }
+        var result = {}
+        map.set(value, result)
+        for (var key in value) {
+          if (value.hasOwnProperty(key)) {
+            result[key] = realDeepClone(value[key])
+          }
+        }
+        return result
+      } else {
+        return value
+      }
+    }
+    return realDeepClone(value)
+  }
+
   function drop(arr, n) {
     if (n === undefined) {
       n = 1
@@ -1007,41 +1043,7 @@ var shine_hfrao = (function () {
   }
 
 
-  function clone(value) {
-    if (value && typeof value === 'object') {
-      var result = {}
-      for (var key in value) {
-        if (value.hasOwnProperty(key)) {
-          result[key] = value[key]
-        }
-      }
-      return result
-    } else {
-      return value
-    }
-  }
 
-  function deepClone(value) {
-    var map = new Map()	// 记录深层的对象中指向包含他的对象形成环的情况，要用map记录已克隆过的对象
-    function realDeepClone(value) {
-      if (value && typeof value === 'object') {
-        if (map.has(value)) {
-          return map.get(value)
-        }
-        var result = {}
-        map.set(value, result)
-        for (var key in value) {
-          if (value.hasOwnProperty(key)) {
-            result[key] = realDeepClone(value[key])
-          }
-        }
-        return result
-      } else {
-        return value
-      }
-    }
-    return realDeepClone(value)
-  }
 
   function swap(array, preIndex, lastIndex) {
     if (preIndex === lastIndex) {
@@ -1420,6 +1422,7 @@ var shine_hfrao = (function () {
     sum,
     sumBy,
     shuffle,
+    size,
     some,
     sortBy,
     matches,
