@@ -766,7 +766,7 @@ var shine_hfrao = (function () {
   }
 
   function isArguments(value) {
-    if (value.hasOwnProperty('length') && Symbol.iterator in value) {
+    if (Object.prototype.toString.call(value) === '[object Object]' && value.hasOwnProperty('length') && Symbol.iterator in value) {
       return true
     }
     return false
@@ -785,7 +785,7 @@ var shine_hfrao = (function () {
   }
 
   function isArrayLikeObject(value) {
-    return isArrayLike(value) && Object.prototype.toString.call(value) === '[object Object]'
+    return isArrayLike(value) && typeof value === 'object'
   }
 
   function join(arr, separator = ',') {
