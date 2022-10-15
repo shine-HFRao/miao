@@ -328,7 +328,7 @@ var shine_hfrao = (function () {
   }
 
   function eq(value, other) {
-    if (isNaN(value) && isNaN(other)) {
+    if (Number.isNaN(value) && Number.isNaN(other)) {
       return true
     }
     return value === other
@@ -769,6 +769,7 @@ var shine_hfrao = (function () {
     if (value.hasOwnProperty('length') && Symbol.iterator in value) {
       return true
     }
+    return false
   }
 
   function isArray(value) {
@@ -784,7 +785,7 @@ var shine_hfrao = (function () {
   }
 
   function isArrayLikeObject(value) {
-    return isArrayLike(value) && typeof value === 'obejct'
+    return isArrayLike(value) && Object.prototype.toString.call(value) === '[object Object]'
   }
 
   function join(arr, separator = ',') {
@@ -1400,6 +1401,7 @@ var shine_hfrao = (function () {
     forEachRight,
     groupBy,
     gt,
+    gte,
     invokeMap,
     includes,
     isEqual,
