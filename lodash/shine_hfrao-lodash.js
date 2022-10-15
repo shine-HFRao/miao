@@ -327,6 +327,13 @@ var shine_hfrao = (function () {
     return true
   }
 
+  function eq(value, other) {
+    if (isNaN(value) && isNaN(other)) {
+      return true
+    }
+    return value === other
+  }
+
   function fromPairs(arr) {
     var result = {}
     for (var i = 0; i < arr.length; i++) {
@@ -544,6 +551,14 @@ var shine_hfrao = (function () {
     return result
   }
 
+  function gt(value, other) {
+    return value > other
+  }
+
+  function gte(value, other) {
+    return value >= other
+  }
+
   function head(arr) {
     return arr[0]
   }
@@ -704,6 +719,74 @@ var shine_hfrao = (function () {
     }
   }
 
+
+  function isEqual(value, other) {
+    var mapCache = new Map()  // 记录对象或数组产生环的时候，防止栈溢出
+    function realIsEqual(value, other) {
+      if (value === other) {
+        return true
+      } else {
+        if (Object.prototype.toString.call(value) === '[object Object]' && Object.prototype.toString.call(other) === '[object Object]') {
+          if (mapCache.has(value)) {
+            return mapCache.get(value)
+          }
+          mapCache.set(value, true)
+          if (Object.keys(value).length !== Object.keys(other).length) {
+            return false
+          }
+          for (key of Object.keys(value)) {
+            if (!realIsEqual(value[key], other[key])) {
+              return false
+            }
+          }
+          return true
+        }
+        if (Object.prototype.toString.call(value) === '[object Array]' && Object.prototype.toString.call(other) === '[object Array]') {
+          if (mapCache.has(value)) {
+            return mapCache.get(value)
+          }
+          mapCache.set(value, true)
+          if (value.length !== other.length) {
+            return false
+          }
+          for (var i = 0; i < value.length; i++) {
+            if (!realIsEqual(value[i], other[i])) {
+              return false
+            }
+          }
+          return true
+        }
+        return false
+      }
+    }
+    return realIsEqual(value, other)
+  }
+
+  function isEqualWith(value, other, customizer) {
+  }
+
+  function isArguments(value) {
+    if (value.hasOwnProperty('length') && Symbol.iterator in value) {
+      return true
+    }
+  }
+
+  function isArray(value) {
+    return Object.prototype.toString.call(value) === '[object Array]'
+  }
+
+  function isArrayBuffer(value) {
+    return Object.prototype.toString.call(value) === '[object ArrayBuffer]'
+  }
+
+  function isArrayLike(value) {
+    return value.hasOwnProperty('length') && (value.length | 0) === value.length && value.length >= 0 && value.length <= Number.MAX_SAFE_INTEGER
+  }
+
+  function isArrayLikeObject(value) {
+    return isArrayLike(value) && typeof value === 'obejct'
+  }
+
   function join(arr, separator = ',') {
     var str = ''
     for (var i = 0; i < arr.length; i++) {
@@ -744,6 +827,14 @@ var shine_hfrao = (function () {
       result.push(predicate(collection[key], key, collection))
     }
     return result
+  }
+
+  function nth(array, n) {
+    if (n >= 0) {
+      return array[n]
+    } else {
+      return array[array.length + n]
+    }
   }
 
   function orderBy() {
@@ -900,14 +991,6 @@ var shine_hfrao = (function () {
     return result
   }
 
-  function nth(array, n) {
-    if (n >= 0) {
-      return array[n]
-    } else {
-      return array[array.length + n]
-    }
-  }
-
   function sortedIndex(array, value) {
 
   }
@@ -949,6 +1032,88 @@ var shine_hfrao = (function () {
       swap(array, randomIdx, i - 1)
     }
     return array
+  }
+
+  function swap(array, preIndex, lastIndex) {
+    if (preIndex === lastIndex) {
+      return array
+    }
+    var medium = array[preIndex]
+    array[preIndex] = array[lastIndex]
+    array[lastIndex] = medium
+    return array
+  }
+
+  function size(collection) {
+    if (collection.hasOwnProperty(length)) {
+      return collection.length
+    }
+    var length = 0
+    for (var key in collection) {
+      length++
+    }
+    return length
+  }
+
+  function some(collection, predicate) {
+    predicate = iteratee(predicate)
+    for (let item of collection) {
+      if (predicate(item)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  function sortBy(collection, predicate) {
+    let result = collection.slice()
+    predicate = iteratee(predicate)
+    for (let j = 0; j < result.length - 1; j++) {
+      for (let i = 0; i < result.length - 1; i++) {
+        let pre = predicate(result[i])
+        let next = predicate(result[i + 1])
+        if (pre > next) {
+          swap(result, i, i + 1)
+        }
+      }
+    }
+
+    return result
+  }
+
+  function tail(array) {
+    array.shift()
+    return array
+  }
+
+  function take(array, n = 1) {
+    array.splice(n)
+    return array
+  }
+
+  function takeRight(array, n = 1) {
+    if (n >= array.length) {
+      return array
+    }
+    return array.splice(array.length - n)
+  }
+
+  function takeWhile(array, predicate) {
+    predicate = iteratee(predicate)
+    for (var i = 0; i < array.length; i++) {
+      if (!predicate(array[i], i, array)) {
+        return array.splice(0, i)
+      }
+    }
+  }
+
+  function takeRightWhile(array, predicate) {
+    predicate = iteratee(predicate)
+    for (var i = array.length - 1; i >= 0; i--) {
+      if (!predicate(array[i], i, array)) {
+        return array.splice(i + 1)
+      }
+    }
   }
 
   // 数组合并
@@ -1042,137 +1207,6 @@ var shine_hfrao = (function () {
     return result
   }
 
-
-
-
-  function swap(array, preIndex, lastIndex) {
-    if (preIndex === lastIndex) {
-      return array
-    }
-    var medium = array[preIndex]
-    array[preIndex] = array[lastIndex]
-    array[lastIndex] = medium
-    return array
-  }
-
-  function size(collection) {
-    if (collection.hasOwnProperty(length)) {
-      return collection.length
-    }
-    var length = 0
-    for (var key in collection) {
-      length++
-    }
-    return length
-  }
-
-  function some(collection, predicate) {
-    predicate = iteratee(predicate)
-    for (let item of collection) {
-      if (predicate(item)) {
-        return true
-      }
-    }
-    return false
-  }
-
-  function sortBy(collection, predicate) {
-    let result = collection.slice()
-    predicate = iteratee(predicate)
-    for (let j = 0; j < result.length - 1; j++) {
-      for (let i = 0; i < result.length - 1; i++) {
-        let pre = predicate(result[i])
-        let next = predicate(result[i + 1])
-        if (pre > next) {
-          swap(result, i, i + 1)
-        }
-      }
-    }
-
-    return result
-  }
-
-  function tail(array) {
-    array.shift()
-    return array
-  }
-
-  function take(array, n = 1) {
-    array.splice(n)
-    return array
-  }
-
-  function takeRight(array, n = 1) {
-    if (n >= array.length) {
-      return array
-    }
-    return array.splice(array.length - n)
-  }
-
-  function takeWhile(array, predicate) {
-    predicate = iteratee(predicate)
-    for (var i = 0; i < array.length; i++) {
-      if (!predicate(array[i], i, array)) {
-        return array.splice(0, i)
-      }
-    }
-  }
-
-  function takeRightWhile(array, predicate) {
-    predicate = iteratee(predicate)
-    for (var i = array.length - 1; i >= 0; i--) {
-      if (!predicate(array[i], i, array)) {
-        return array.splice(i + 1)
-      }
-    }
-  }
-
-  function isEqual(value, other) {
-    var mapCache = new Map()  // 记录对象或数组产生环的时候，防止栈溢出
-    function realIsEqual(value, other) {
-      if (value === other) {
-        return true
-      } else {
-        if (Object.prototype.toString.call(value) === '[object Object]' && Object.prototype.toString.call(other) === '[object Object]') {
-          if (mapCache.has(value)) {
-            return mapCache.get(value)
-          }
-          mapCache.set(value, true)
-          if (Object.keys(value).length !== Object.keys(other).length) {
-            return false
-          }
-          for (key of Object.keys(value)) {
-            if (!realIsEqual(value[key], other[key])) {
-              return false
-            }
-          }
-          return true
-        }
-        if (Object.prototype.toString.call(value) === '[object Array]' && Object.prototype.toString.call(other) === '[object Array]') {
-          if (mapCache.has(value)) {
-            return mapCache.get(value)
-          }
-          mapCache.set(value, true)
-          if (value.length !== other.length) {
-            return false
-          }
-          for (var i = 0; i < value.length; i++) {
-            if (!realIsEqual(value[i], other[i])) {
-              return false
-            }
-          }
-          return true
-        }
-        return false
-      }
-    }
-    return realIsEqual(value, other)
-  }
-
-  function isEqualWith(value, other, customizer) {
-
-  }
-
   function without(array, ...values) {
     var result = []
     for (var i = 0; i < array.length; i++) {
@@ -1228,10 +1262,6 @@ var shine_hfrao = (function () {
     }
   }
 
-
-  // 实现
-  // _.zip(['fred', 'barney'], [30, 40], [true, false]);
-  // => [['fred', 30, true], ['barney', 40, false]]
   function zip(...arrays) {
     var result = []
     var maxLen = 0
@@ -1357,6 +1387,7 @@ var shine_hfrao = (function () {
     dropRightWhile,
     deepClone,
     every,
+    eq,
     find,
     findLast,
     flatten,
@@ -1368,6 +1399,7 @@ var shine_hfrao = (function () {
     forEach,
     forEachRight,
     groupBy,
+    gt,
     invokeMap,
     includes,
     isEqual,
@@ -1376,6 +1408,11 @@ var shine_hfrao = (function () {
     intersection,
     intersectionBy,
     intersectionWith,
+    isArguments,
+    isArray,
+    isArrayBuffer,
+    isArrayLike,
+    isArrayLikeObject,
     keyBy,
     map,
     takeWhile,
