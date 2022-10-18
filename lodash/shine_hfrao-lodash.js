@@ -788,6 +788,23 @@ var shine_hfrao = (function () {
     return isArrayLike(value) && typeof value === 'object'
   }
 
+  function isNaN(value) {
+    var n = Number(value);
+    return n !== n;
+  };
+
+  function isBoolean(value) {
+    Object.prototype.toString.call(value) === '[object Boolean]'
+  }
+
+  function isDate(value) {
+    Object.prototype.toString.call(value) === '[object Date]'
+  }
+
+  function isElement(value) {
+    Object.prototype.toString.call(value) === '[object Date]'
+  }
+
   function join(arr, separator = ',') {
     var str = ''
     for (var i = 0; i < arr.length; i++) {
@@ -1376,10 +1393,12 @@ var shine_hfrao = (function () {
     return val
   }
   return {
+    chunk,
     clone,
     countBy,
     castArray,
     conformsTo,
+    compact,
     defer,
     delay,
     drop,
@@ -1387,6 +1406,9 @@ var shine_hfrao = (function () {
     dropWhile,
     dropRightWhile,
     deepClone,
+    difference,
+    differenceBy,
+    differenceWith,
     every,
     eq,
     find,
@@ -1399,9 +1421,16 @@ var shine_hfrao = (function () {
     flatMapDepth,
     forEach,
     forEachRight,
+    fill,
+    filter,
+    findIndex,
+    findLastIndex,
+    fromPairs,
     groupBy,
     gt,
     gte,
+    head,
+    indexOf,
     invokeMap,
     includes,
     isEqual,
@@ -1415,46 +1444,33 @@ var shine_hfrao = (function () {
     isArrayBuffer,
     isArrayLike,
     isArrayLikeObject,
-    keyBy,
-    map,
-    takeWhile,
-    takeRightWhile,
-    takeRight,
-    take,
-    tail,
-
-    uniqBy,
-    uniq,
-    uniqWith,
-    union,
-    unionBy,
-    unionWith,
-
-    parseQueryString,
-    compact,
-    fill,
-    filter,
-
-    findIndex,
-    findLastIndex,
-    chunk,
-    fromPairs,
-    head,
-    indexOf,
-    lastIndexOf,
+    isNaN,
     initial,
+    isMatch,
+    iteratee,
+    isBoolean,
+    isDate,
+    isElement,
     join,
+    keyBy,
     last,
-    remove,
+    lastIndexOf,
+    map,
+    matches,
+    matchesProperty,
+    nth,
     pull,
     pullAll,
     pullAllBy,
     pullAllWith,
+    parseQueryString,
+    property,
+    partition,
     reverse,
-    difference,
-    differenceBy,
-    differenceWith,
-    nth,
+    remove,
+    reduce,
+    reduceRight,
+    reject,
     sortedIndex,
     sample,
     sampleSize,
@@ -1464,19 +1480,22 @@ var shine_hfrao = (function () {
     size,
     some,
     sortBy,
-    matches,
-    isMatch,
-    matchesProperty,
-    property,
-    partition,
-    reduce,
-    reduceRight,
-    reject,
+    takeWhile,
+    takeRightWhile,
+    takeRight,
+    take,
+    tail,
+    uniqBy,
+    uniq,
+    uniqWith,
+    union,
+    unionBy,
+    unionWith,
     unzip,
     unzipWith,
     without,
-    iteratee,
     xor,
+    xorBy,
     zip,
     zipObject,
     zipObjectDeep,
