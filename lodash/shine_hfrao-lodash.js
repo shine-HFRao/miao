@@ -788,8 +788,12 @@ var shine_hfrao = (function () {
     return isArrayLike(value) && typeof value === 'object'
   }
 
+  function isNumber(value) {
+    typeof value === 'number' || Object.prototype.toString.call(value) === '[object Number]'
+  }
+
   function isNaN(value) {
-    return (typeof value === 'number' || typeof value === 'object') && value !== +value;
+    return isNumber(value) && value !== +value;
   };
 
   function isBoolean(value) {
@@ -1456,6 +1460,7 @@ var shine_hfrao = (function () {
     isArrayBuffer,
     isArrayLike,
     isArrayLikeObject,
+    isNumber,
     isNaN,
     initial,
     isMatch,
