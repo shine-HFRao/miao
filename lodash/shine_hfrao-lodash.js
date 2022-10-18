@@ -789,16 +789,15 @@ var shine_hfrao = (function () {
   }
 
   function isNaN(value) {
-    var n = Number(value);
-    return n !== n;
+    return value !== value;
   };
 
   function isBoolean(value) {
-    Object.prototype.toString.call(value) === '[object Boolean]'
+    return Object.prototype.toString.call(value) === '[object Boolean]'
   }
 
   function isDate(value) {
-    Object.prototype.toString.call(value) === '[object Date]'
+    return Object.prototype.toString.call(value) === '[object Date]'
   }
 
   function isElement(value) {
