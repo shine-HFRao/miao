@@ -789,7 +789,7 @@ var shine_hfrao = (function () {
   }
 
   function isNumber(value) {
-    typeof value === 'number' || Object.prototype.toString.call(value) === '[object Number]'
+    return typeof value === 'number' || Object.prototype.toString.call(value) === '[object Number]'
   }
 
   function isNaN(value) {
