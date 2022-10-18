@@ -802,7 +802,20 @@ var shine_hfrao = (function () {
   }
 
   function isElement(value) {
-    Object.prototype.toString.call(value) === '[object Date]'
+    return isObjectLike(value) && value.nodeType === 1 && !isPlainObject(value);
+  }
+
+  function isObject(value) {
+    var type = typeof value;
+    return value != null && (type == 'object' || type == 'function');
+  }
+
+  function isObjectLike(value) {
+    return value != null && typeof value == 'object';
+  }
+
+  function isPlainObject(value) {
+
   }
 
   function join(arr, separator = ',') {
@@ -1451,6 +1464,8 @@ var shine_hfrao = (function () {
     isBoolean,
     isDate,
     isElement,
+    isObject,
+    isObjectLike,
     join,
     keyBy,
     last,
