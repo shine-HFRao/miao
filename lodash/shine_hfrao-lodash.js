@@ -789,7 +789,7 @@ var shine_hfrao = (function () {
   }
 
   function isNaN(value) {
-    return value !== value;
+    return (typeof value === 'number' || typeof value === 'object') && value !== +value;
   };
 
   function isBoolean(value) {
