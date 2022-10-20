@@ -821,6 +821,26 @@ var shine_hfrao = (function () {
 
   }
 
+  function isError(value) {
+    return Object.prototype.toString.call(value) === '[object Error]'
+  }
+
+  function isFunction(value) {
+    return Object.prototype.toString.call(value) === '[object Function]'
+  }
+
+  function isFinite(value) {
+    return typeof value === 'number' && value > -Infinity && value < Infinity
+  }
+
+  function isInteger(value) {
+    return Number.isInteger(value)
+  }
+
+  function isMap(value) {
+    return Object.prototype.toString.call(value) === '[object Map]'
+  }
+
   function join(arr, separator = ',') {
     var str = ''
     for (var i = 0; i < arr.length; i++) {
@@ -1470,6 +1490,11 @@ var shine_hfrao = (function () {
     isElement,
     isObject,
     isObjectLike,
+    isError,
+    isFunction,
+    isFinite,
+    isInteger,
+    isMap,
     join,
     keyBy,
     last,
